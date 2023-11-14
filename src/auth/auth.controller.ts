@@ -15,14 +15,7 @@ import { LoginUserModel, RegisterUserModel } from './login.model';
 import { admin } from 'src/main';
 import { RegisterService } from './register.service';
 import { LoginService } from './login.service';
-import { RolesGuard } from './guard/roles.guard';
-import { CookieAuthGuard } from 'src/auth.guard';
-import { Roles } from './guard/roles.decorator';
-import { Role } from './guard/roles.enum';
 
-@UseGuards(CookieAuthGuard)
-@UseGuards(RolesGuard)
-@Roles(Role.Admin, Role.Approver)
 @Controller('register')
 export class RegisterController {
   constructor(private registerService: RegisterService) {}
@@ -81,27 +74,5 @@ export class LoginController {
   // Handle GET requests to check for existing cookies
   @Render('login')
   @Get()
-  async getCookie(@Req() req: Request, @Res() res: Response) {
-    // Check if 'signedCookies' is defined and if 'id' is present
-    // if (req.signedCookies && req.signedCookies.id) {
-    //   // Destructure properties if the 'id' cookie exists
-    //   const { idToken, role } = req.signedCookies.id;
-
-    //   try {
-    //     // Verify the 'id' token using Firebase Admin SDK
-    //     await admin.auth().verifyIdToken(idToken);
-    //   } catch (error) {
-    //     // Log the specific details of the error
-    //     console.error(error);
-
-    //     // Render the login page in case of verification failure
-    //     res.render('login');
-    //     res.end();
-    //   }
-    // } else {
-    //   // Handle the case when the 'id' cookie doesn't exist
-    //   res.render('login');
-    //   res.end();
-    // }
-  }
+  async getCookie() {}
 }
