@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Bananalem0n">
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/icons/bootstrap-icon/bootstrap-icons.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/assets/amati-logo.png">
+  <title>AMATI Indonesia Approval WebApp</title>
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+  <!-- Custom styles for this template -->
+  <link href="/assets/css/signin.css" rel="stylesheet">
+</head>
+
+<body class="text-center" style="background-color: rgb(247, 244, 244);">
+
+  <main class="form-signin">
+    <form action="" method="post" id="registrationForm">
+      <img class="mb-4" src="/assets/amati-logo.png" alt="AMATI Indonesia Logo" width="120" height="120">
+      <div class="form-floating">
+        <input type="text" required class="form-control" name="username" id="floatingInput" placeholder="">
+        <label for="floatingInput">Username</label>
+      </div>
+      <div class="form-floating">
+        <input type="email" required class="form-control" name="email" id="floatingInput" placeholder="">
+        <label for="floatingInput">Email address</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" required class="form-control" name="password" id="floatingPassword" placeholder="">
+        <label for="floatingPassword">Password</label>
+        <span id="passwordError" class="text-danger"></span>
+      </div>
+      <div class="form-floating">
+        <input type="text" required class="form-control" name="businessName" id="floatingInput" placeholder="">
+        <label for="floatingInput">Bussiness Name</label>
+      </div>
+      <div class="form-floating">
+        <input type="text" required class="form-control" name="nib" id="floatingInput" placeholder="">
+        <label for="floatingInput">Nomor Induk Berusaha</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="tel" required class="form-control" name="telephone" id="floatingInput" placeholder="">
+        <label for="floatingInput">Telephone/WA</label>
+      </div>
+      <div class="form-floating mb-3">
+        <textarea class="form-control" name="deskripsi" id="floatingInput" placeholder=""></textarea>
+        <label for="floatingInput">Deskripsi</label>
+      </div>
+      <button class="w-100 btn btn-lg amati-green text-white" type="submit">Register</button>
+    </form>
+    <hr>
+    <div class="provider">
+      <a href="/login">
+        <button class="w-100 btn btn-lg border-success text-secondary provider" type="button">
+          already got one?
+        </button>
+      </a>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+      var passwordInput = document.getElementById("floatingPassword");
+      var passwordError = document.getElementById("passwordError");
+      var password = passwordInput.value;
+
+      if (password.length <= 6) {
+        passwordError.textContent = "Password must be more than 6 characters";
+        event.preventDefault(); // Prevent form submission
+      } else {
+        passwordError.textContent = ""; // Clear any previous error message
+      }
+    });
+  </script>
+</body>
+</html>

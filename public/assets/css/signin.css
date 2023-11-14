@@ -1,0 +1,62 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-signin .checkbox {
+  font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[name="name"], input[name="bussinessName"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[name="email"], input[name="nib"] {
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+
+.form-signin input[type="password"], input[name="telephone"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.bi {
+  margin-right: 10px;
+}
+
+.provider:hover {
+  background-color:#dedede;
+  border-radius: 0.5rem;
+  box
+}
+
+.amati-green {
+  background-color: #20ba91;
+}
+
+.amati-green:hover {
+  background-color: #108F6E;
+}
