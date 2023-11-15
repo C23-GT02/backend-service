@@ -16,7 +16,7 @@ export class UnauthorizedExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof UnauthorizedException) {
       // Redirect to another site when the authentication fails.
-      response.redirect('http://localhost:3000/');
+      response.redirect(`http://localhost:${process.env.PORT ?? 3000}/`);
     } else {
       response.status(500).json({
         message: 'Internal server error',
