@@ -7,5 +7,5 @@ export class AppController {
 
   @Redirect('/login')
   @Get()
-  getHello() {}
+  app() {}
 }

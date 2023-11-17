@@ -34,7 +34,7 @@
 <body class="text-center" style="background-color: rgb(247, 244, 244);">
 
   <main class="form-signin">
-    <form action="" method="post" id="registrationForm">
+    <form action="" method="post" id="registrationForm" enctype="multipart/form-data">
       <img class="mb-4" src="/assets/amati-logo.png" alt="AMATI Indonesia Logo" width="120" height="120">
       <div class="form-floating">
         <input type="text" required class="form-control" name="username" id="floatingInput" placeholder="">
@@ -65,6 +65,11 @@
         <textarea class="form-control" name="deskripsi" id="floatingInput" placeholder=""></textarea>
         <label for="floatingInput">Deskripsi</label>
       </div>
+      <div class="mb-3">
+        <label for="formFile" class="form-label float-start">Logo</label>
+        <input name="logo" class="form-control" type="file" id="logo" accept="image/*">
+      </div>
+
       <button class="w-100 btn btn-lg amati-green text-white" type="submit">Register</button>
     </form>
     <hr>
@@ -78,7 +83,7 @@
   </main>
 
   <script>
-    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+    document.getElementById("registrationForm").addEventListener("submit", function (event) {
       var passwordInput = document.getElementById("floatingPassword");
       var passwordError = document.getElementById("passwordError");
       var password = passwordInput.value;
@@ -92,4 +97,5 @@
     });
   </script>
 </body>
+
 </html>

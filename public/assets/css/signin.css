@@ -26,7 +26,7 @@ body {
   z-index: 2;
 }
 
-.form-signin input[name="name"], input[name="bussinessName"] {
+.form-signin input[name="username"], input[name="businessName"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;

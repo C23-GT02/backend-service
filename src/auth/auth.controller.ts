@@ -5,17 +5,18 @@ import {
   Get,
   Post,
   Render,
-  Req,
   Res,
-  UnauthorizedException,
-  UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { CookieOptions, Request, Response } from 'express';
+import { CookieOptions, Response } from 'express';
 import { LoginUserModel, RegisterUserModel } from './login.model';
 import { admin } from 'src/main';
 import { RegisterService } from './register.service';
 import { LoginService } from './login.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
+// Define a controller for the '/register' route
 @Controller('register')
 export class RegisterController {
   constructor(private registerService: RegisterService) {}
@@ -24,21 +25,39 @@ export class RegisterController {
   async registerUserPage() {}
 
   @Post()
-  async registerUser(@Body() body: RegisterUserModel) {
-    const user = await this.registerService.storeUnapprovedUser(body);
-    console.log(user);
-    return user;
+  @UseInterceptors(FileInterceptor('logo'))
+  async registerUser(
+    @Body() body: RegisterUserModel,
+    @UploadedFile() logo: Express.Multer.File,
+    @Res() res: Response,
+  ) {
+    const { businessName } = body;
+
+    try {
+      logo.originalname = 'logo.png';
+
+      const image = await this.registerService.storeImage(
+        `${businessName}/logo`,
+        logo,
+      );
+      body.logo = image;
+      // Store the user data (including the logo) in the database
+      console.log(body);
+      await this.registerService.storeUnapprovedUser(body);
+      // Redirect to the login page
+      res.redirect('/login');
+    } catch (error) {
+      return error;
+    }
   }
 }
 
 // Define a controller for the '/login' route
-
 @Controller('login')
 export class LoginController {
   constructor(private loginService: LoginService) {}
   // cookie expiration in day
   private duration = 1000 * 3600 * 24 * parseInt(process.env.COOKIES_EXP);
-  // Configure options for cookies
   private cookieOptions: CookieOptions = {
     maxAge: this.duration,
     httpOnly: true,
@@ -66,7 +85,8 @@ export class LoginController {
     if (data.role == 'admin' || data.role == 'approver') {
       res.redirect('/admin');
     } else if (data.role == 'partner') {
-      res.redirect('partner');
+      res.redirect('/partner');
+      // res.redirect('partner');
     }
     res.redirect('/register');
   }

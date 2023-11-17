@@ -1,0 +1,247 @@
+{{!--
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Bananalem0n">
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+  <title>AMATI Indonesia Approval WebApp</title>
+  <script src="/assets/js/bootstrap.bundle.min.js">
+  </script>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <img src="{{logo}}" alt="Company Logo" class="img-fluid" width="200">
+      </div>
+      <div class="col-12 col-md-8">
+        <p><strong>Name :</strong> {{nama}}</p>
+        <p><strong>Found Year :</strong> {{tahun_berdiri}}</p>
+        <p><strong>WhatsApp :</strong> {{WA}}</p>
+        <p><strong>Description :</strong> {{deskripsi}}</p>
+        <p><strong>Email :</strong> {{email}}</p>
+        <p><strong>NIB :</strong> {{NIB}}</p>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">Approve</button>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approve Modal -->
+  <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">Approve Company</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to approve this company?
+        </div>
+        <div class="modal-footer">
+          <form action="" method="post">
+            <button type="submit" class="btn btn-success">Approve</button>
+          </form>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject Modal -->
+  <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rejectModalLabel">Reject Company</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to reject this company?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Reject</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html> --}}
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Bananalem0n">
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/icons/bootstrap-icon/bootstrap-icons.css" rel="stylesheet">
+  <title>AMATI Indonesia dashboard WebApp</title>
+
+  <!-- Custom styles for this template -->
+  <link href="/assets/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <header class="navbar navbar-dark sticky-top amati-green flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-4 py-3" href="#">AMATI Indonesia</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {{!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> --}}
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="sign-out px-3 py-3" href="#" data-bs-toggle="modal" data-bs-target="#signOutModal">Sign Out</a>
+      </div>
+    </div>
+    <!-- Sign Out Confirmation Modal -->
+  </header>
+
+  <div class="modal fade" id="signOutModal" tabindex="-1" aria-labelledby="signOutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="button">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signOutModalLabel">Confirm Sign Out</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to sign out?
+        </div>
+        <div class="modal-footer">
+          <a href="http://localhost:3000/signout" class="btn btn-primary">Sign Out</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/admin/partner">
+                <span data-feather="users"></span>
+                Business Partners
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/admin/approval">
+                <span data-feather="file"></span>
+                Pending Partner Requests
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/admin/access" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                Access Control
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Dashboard</h1>
+
+        </div>
+
+
+
+        <div class="container mt-4">
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <img src="data:image/png;base64,{{image}}" alt="Company Logo" class="img-fluid" width="300">
+            </div>
+            <div class="col-12 col-md-8">
+              <p><strong>UUID :</strong> {{data.uuid}}</p>
+              <p><strong>Partner Name :</strong> {{data.businessName}}</p>
+              <p><strong>Email :</strong> {{data.email}}</p>
+              <p><strong>Description :</strong> {{data.deskripsi}}</p>
+              <p><strong>Telephone :</strong> {{data.telephone}}</p>
+              <p><strong>NIB :</strong> {{data.nib}}</p>
+              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">Approve</button>
+              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">Reject</button>
+            </div>
+          </div>
+        </div>
+        <!-- Approve Modal -->
+        <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Approve Company</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to approve this company?
+              </div>
+              <div class="modal-footer">
+                <form action="" method="post">
+                  <button type="submit" class="btn btn-success">Approve</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reject Modal -->
+        <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel">Reject Company</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to reject this company?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger">Reject</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/assets/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+    crossorigin="anonymous"></script>
+  <script src="/assets/js/dashboard.js"></script>
+</body>
+
+</html>
