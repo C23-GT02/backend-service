@@ -144,6 +144,12 @@
               </a>
             </li>
             <li class="nav-item my-1">
+              <a class="nav-link active" href="#">
+                <span data-feather="users"></span>
+                Partner Data
+              </a>
+            </li>
+            <li class="nav-item my-1">
               <a class="nav-link" href="/admin/approval">
                 <span data-feather="file"></span>
                 Pending Partner Requests
@@ -163,69 +169,46 @@
         <div
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">Dashboard</h1>
-
         </div>
-
-
-
         <div class="container mt-4">
           <div class="row">
-            <div class="col-12 col-md-4">
-              <img src="data:image/png;base64,{{image}}" alt="Company Logo" class="img-fluid" width="300">
+            <div class="col-md-4">
+              <img src="{{Logo}}" alt="Company Logo" class="img-fluid" width="200">
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-md-8">
               <p><strong>UUID :</strong> {{data.uuid}}</p>
-              <p><strong>Partner Name :</strong> {{data.businessName}}</p>
+              <p><strong>Company Name :</strong> {{data.businessName}}</p>
               <p><strong>Email :</strong> {{data.email}}</p>
               <p><strong>Description :</strong> {{data.deskripsi}}</p>
               <p><strong>Telephone :</strong> {{data.telephone}}</p>
               <p><strong>NIB :</strong> {{data.nib}}</p>
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">Approve</button>
-              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">Reject</button>
             </div>
           </div>
         </div>
-        <!-- Approve Modal -->
-        <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="approveModalLabel">Approve Company</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                Are you sure you want to approve this company?
-              </div>
-              <div class="modal-footer">
-                <form action="" method="post">
-                  <button type="submit" class="btn btn-success">Approve</button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              </div>
+        <div class="container-fluid mt-5">
+          <div class="card text-center">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs flex">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="true" href="#">Products</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Gallery</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"></a>
+                </li>
+              </ul>
             </div>
-          </div>
-        </div>
-
-        <!-- Reject Modal -->
-        <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="rejectModalLabel">Reject Company</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                Are you sure you want to reject this company?
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger">Reject</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <div class="card-body row mt-3">
+              <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                <div class="card w-100">
+                  <img src="data:image/png;base64,{{base64Image}}" class="img-thumbnail" alt="Image">
+                  <div class="card-body">
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                      card's content.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

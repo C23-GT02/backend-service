@@ -6,6 +6,8 @@ import { LoginService } from './auth/login.service';
 import { RegisterService } from './auth/register.service';
 import { DashboardAdminController } from './dashboard-admin/dashboard-admin.controller';
 import { DashboardAdminService } from './dashboard-admin/dashboard-admin.service';
+import { PartnerController } from './partner/partner.controller';
+import { PartnerService } from './partner/partner.service';
 
 @Module({
   imports: [],
@@ -14,7 +16,14 @@ import { DashboardAdminService } from './dashboard-admin/dashboard-admin.service
     LoginController,
     RegisterController,
     DashboardAdminController,
+    PartnerController,
   ],
-  providers: [AppService, LoginService, RegisterService, DashboardAdminService],
+  providers: [
+    AppService,
+    LoginService,
+    RegisterService,
+    DashboardAdminService,
+    PartnerService,
+  ],
 })
 export class AppModule {}

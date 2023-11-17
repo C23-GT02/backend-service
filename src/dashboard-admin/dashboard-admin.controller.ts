@@ -1,6 +1,16 @@
-import { Controller, Get, Param, ParamData, Redirect, Render } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Redirect,
+  Render,
+  ValidationPipe,
+} from '@nestjs/common';
 import { DashboardAdminService } from './dashboard-admin.service';
-
+import { ApproverDTO } from './access.model';
+import axios from 'axios';
 @Controller('admin')
 export class DashboardAdminController {
   private verifiedPartnerCollection: string = 'verifiedPartner';
@@ -11,7 +21,7 @@ export class DashboardAdminController {
     private dasboardAdminService: DashboardAdminService, // private AccessDashboard: AccessDashboardService,
   ) {}
 
-  @Redirect('/admin/patner')
+  @Redirect('/admin/partner')
   @Get()
   async redirectAdmin() {}
 
@@ -25,13 +35,21 @@ export class DashboardAdminController {
   }
 
   @Get('partner/:id')
-  @Render('unverifiedPartner')
+  @Render('verified-partner')
   async getPartnerData(@Param('id') id: string) {
     const data = await this.dasboardAdminService.getPartnerById(
       this.verifiedPartnerCollection,
       id,
     );
-    return data;
+
+    const imageURL =
+      'https://storage.googleapis.com/tracker-64690.appspot.com/company-assets/Amati_Indonesia/amati-logo.png';
+
+    // Fetch the image from the URL and convert it to base64
+    const response = await axios.get(imageURL, { responseType: 'arraybuffer' });
+    const image = Buffer.from(response.data, 'binary').toString('base64');
+
+    return { data, image };
   }
 
   @Get('approval')
@@ -43,12 +61,44 @@ export class DashboardAdminController {
     return { data };
   }
 
+  @Render('unverifiedPartner')
+  @Get('approval/:id')
+  async getUnverifiedPartnerDetails(@Param('id') id: string) {
+    const data = await this.dasboardAdminService.getPartnerById(
+      this.unverifiedPartnerCollection,
+      id,
+    );
+    const response = await axios.get(data.logo, {
+      responseType: 'arraybuffer',
+    });
+    const image = Buffer.from(response.data, 'binary').toString('base64');
+    console.log(data);
+
+    return { data, image };
+  }
+
+  @Post('approval/:id')
+  async approvePartner(@Param('id') id: string) {
+    await this.dasboardAdminService.approved(
+      this.unverifiedPartnerCollection,
+      this.verifiedPartnerCollection,
+      id,
+    );
+  }
+
   @Get('access')
   @Render('access')
   async getAccessPage() {
     const data = await this.dasboardAdminService.getAllDataWithinCollection(
       this.userCollection,
     );
-    return { data };
+    const emails = await this.dasboardAdminService.getAllUsers();
+    return { data: data, email: emails };
+  }
+
+  @Redirect('/admin/access')
+  @Post('access')
+  async CreateApprover(@Body(new ValidationPipe()) body: ApproverDTO) {
+    await this.dasboardAdminService.createApproverUser(body);
   }
 }

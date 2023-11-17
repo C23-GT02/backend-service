@@ -8,6 +8,33 @@ export class RegisterService {
   private unapprovedCollection: string = 'unverifiedPartner';
 
   // handle user register user to make disabled account, and create ticket to be partner
+  async storeImage(location: string, file: Express.Multer.File) {
+    if (!file) {
+      return 'No file uploaded.';
+    }
+
+    // Upload the image to Firebase Storage
+    const bucket = admin.storage().bucket();
+
+    const imageFileName = `${location}/${file.originalname}`;
+    const firebaseFile = bucket.file(imageFileName);
+
+    await firebaseFile.save(file.buffer, {
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
+
+    // Get the public URL of the uploaded file
+    const [url] = await firebaseFile.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2491', // Replace with an appropriate expiration date
+    });
+
+    // Return the public URL to the client
+    return url;
+  }
+
   async storeUnapprovedUser(userData: RegisterUserModel) {
     try {
       const {
@@ -18,16 +45,8 @@ export class RegisterService {
         nib,
         telephone,
         deskripsi,
+        logo,
       } = userData;
-
-      const data = {
-        displayName: username,
-        email,
-        businessName,
-        nib,
-        telephone,
-        deskripsi,
-      };
 
       const user = await admin.auth().createUser({
         displayName: username,
@@ -36,12 +55,23 @@ export class RegisterService {
         disabled: true,
       });
 
+      const data = {
+        uuid: user.uid,
+        displayName: username,
+        email,
+        businessName,
+        nib,
+        telephone,
+        deskripsi,
+        logo,
+      };
+
       await admin
         .firestore()
         .collection(this.unapprovedCollection)
         .doc(businessName)
         .set(data);
-      return user.uid;
+      return data;
     } catch (error) {
       return error;
     }

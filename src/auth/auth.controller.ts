@@ -1,10 +1,20 @@
 // Import necessary modules and dependencies
-import { Body, Controller, Get, Post, Render, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Render,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
 import { LoginUserModel, RegisterUserModel } from './login.model';
 import { admin } from 'src/main';
 import { RegisterService } from './register.service';
 import { LoginService } from './login.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 // Define a controller for the '/register' route
 @Controller('register')
@@ -15,12 +25,27 @@ export class RegisterController {
   async registerUserPage() {}
 
   @Post()
-  async registerUser(@Body() body: RegisterUserModel, @Res() res: Response) {
+  @UseInterceptors(FileInterceptor('logo'))
+  async registerUser(
+    @Body() body: RegisterUserModel,
+    @UploadedFile() logo: Express.Multer.File,
+    @Res() res: Response,
+  ) {
+    const { businessName } = body;
+
     try {
+      logo.originalname = 'logo.png';
+
+      const image = await this.registerService.storeImage(
+        `${businessName}/logo`,
+        logo,
+      );
+      body.logo = image;
+      // Store the user data (including the logo) in the database
+      console.log(body);
       await this.registerService.storeUnapprovedUser(body);
-      res.status(200);
+      // Redirect to the login page
       res.redirect('/login');
-      res.end();
     } catch (error) {
       return error;
     }
@@ -60,7 +85,8 @@ export class LoginController {
     if (data.role == 'admin' || data.role == 'approver') {
       res.redirect('/admin');
     } else if (data.role == 'partner') {
-      res.redirect('partner');
+      res.redirect('/partner');
+      // res.redirect('partner');
     }
     res.redirect('/register');
   }
