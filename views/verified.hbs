@@ -80,7 +80,7 @@
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h3 class="text-secondary">Dashboard</h3>
+          <h3 class="text-secondary"> Admin Dashboard</h3>
           {{!-- <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
               <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -101,7 +101,6 @@
                 <th scope="col">Nama Partner</th>
                 <th scope="col">Email</th>
                 <th scope="col">NIB (Nomor Izin Berusaha)</th>
-                <th scope="col">Deskripsi</th>
                 <th scope="col">Contact</th>
                 <th scope="col"></th>
               </tr>
@@ -110,12 +109,11 @@
               {{#each data}}
               <tr class="text-wrap" data-href="/dashboard/{{id}}">
                 <td class="justify-center px-2">{{@index}}</td>
-                <td>{{nama}}</td>
+                <td>{{businessName}}</td>
                 <td>{{email}}</td>
-                <td>{{NIB}}</td>
-                <td class="text-wrap">{{deskripsi}}</td>
+                <td>{{nib}}</td>
                 <td class="">
-                  {{WA}}
+                  {{telephone}}
                 </td>
                 <td><a href="/admin/partner/{{id}}" class="btn btn-primary">View Details</a></td>
               </tr>

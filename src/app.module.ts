@@ -8,6 +8,7 @@ import { DashboardAdminController } from './dashboard-admin/dashboard-admin.cont
 import { DashboardAdminService } from './dashboard-admin/dashboard-admin.service';
 import { PartnerController } from './partner/partner.controller';
 import { PartnerService } from './partner/partner.service';
+import { AdminAccessService } from './dashboard-admin/access.service';
 
 @Module({
   imports: [],
@@ -24,6 +25,7 @@ import { PartnerService } from './partner/partner.service';
     RegisterService,
     DashboardAdminService,
     PartnerService,
+    AdminAccessService,
   ],
 })
 export class AppModule {}

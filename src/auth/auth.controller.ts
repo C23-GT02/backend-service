@@ -2,7 +2,10 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   Render,
   Res,
@@ -28,7 +31,12 @@ export class RegisterController {
   @UseInterceptors(FileInterceptor('logo'))
   async registerUser(
     @Body() body: RegisterUserModel,
-    @UploadedFile() logo: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'image' })],
+      }),
+    )
+    logo: Express.Multer.File,
     @Res() res: Response,
   ) {
     const { businessName } = body;

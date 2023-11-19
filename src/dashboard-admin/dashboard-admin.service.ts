@@ -1,12 +1,7 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import axios from 'axios';
 import { Role } from 'src/auth/guard/roles.enum';
 import { admin } from 'src/main';
-import { ApproverDTO } from './access.model';
 
 @Injectable()
 export class DashboardAdminService {
@@ -44,6 +39,11 @@ export class DashboardAdminService {
         reject(error);
       }
     });
+  }
+
+  async loadImage(imageURL: string) {
+    const response = await axios.get(imageURL, { responseType: 'arraybuffer' });
+    return Buffer.from(response.data, 'binary').toString('base64');
   }
 
   async approved(
@@ -101,41 +101,4 @@ export class DashboardAdminService {
 
     return users;
   }
-
-  async createApproverUser(data: ApproverDTO) {
-    const { username, email, role } = data;
-    console.log(data);
-    const userData = await admin.auth().getUserByEmail(email);
-
-    const payload = {
-      email: email,
-      name: username,
-      roles: role,
-      uuid: userData.uid,
-    };
-
-    try {
-      await admin
-        .firestore()
-        .collection(this.usersCollection)
-        .doc(email)
-        .set(payload)
-        .then(() => {
-          return true;
-        })
-        .catch((error) => {
-          return new HttpException('custom message', HttpStatus.BAD_REQUEST, {
-            cause: error,
-          });
-        });
-    } catch (error) {
-      return new HttpException('custom message', HttpStatus.BAD_REQUEST, {
-        cause: error,
-      });
-    }
-  }
-
-  // async loadImage() {
-  //   admin.storage().bucket().
-  // }
 }

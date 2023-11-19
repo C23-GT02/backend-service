@@ -79,11 +79,14 @@
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Dashboard</h1>
-          <div class="btn-toolbar mb-2 mb-md-0 p-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary p-2" data-bs-toggle="modal"
+          <h3 class="text-secondary"> Admin Dashboard</h3>
+          <div class="btn-toolbar btn-group mb-2 mb-md-0 p-2">
+            <button type="button" class="btn btn-sm btn-primary p-2" data-bs-toggle="modal"
               data-bs-target="#createUser">
               + Add New User
+            </button>
+            <button type="button" class="btn btn-sm btn-danger p-2" data-bs-toggle="modal" data-bs-target="#deleteUser">
+              Delete User -
             </button>
           </div>
         </div>
@@ -123,6 +126,40 @@
                   </div>
                   <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Delete Approver</h5>
+                <button type="button" class="rounded-2 close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="/admin/access/delete" method="POST">
+                  <!-- Hidden input to set the method to DELETE -->
+
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <select name="email" id="email" class="form-control my-2">
+                      <option value="" aria-disabled="true" disabled selected>Select an Email</option>
+                      {{#each email}}
+                      <option value="{{email}}">{{email}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Delete</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                   </div>
                 </form>

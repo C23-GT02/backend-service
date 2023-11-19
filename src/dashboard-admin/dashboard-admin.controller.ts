@@ -6,11 +6,14 @@ import {
   Post,
   Redirect,
   Render,
+  Res,
   ValidationPipe,
 } from '@nestjs/common';
 import { DashboardAdminService } from './dashboard-admin.service';
 import { ApproverDTO } from './access.model';
-import axios from 'axios';
+import { Response } from 'express';
+import { RegisterUserModel } from 'src/auth/login.model';
+import { AdminAccessService } from './access.service';
 @Controller('admin')
 export class DashboardAdminController {
   private verifiedPartnerCollection: string = 'verifiedPartner';
@@ -18,7 +21,8 @@ export class DashboardAdminController {
   private userCollection: string = 'users';
 
   constructor(
-    private dasboardAdminService: DashboardAdminService, // private AccessDashboard: AccessDashboardService,
+    private dasboardAdminService: DashboardAdminService,
+    private adminAccessService: AdminAccessService,
   ) {}
 
   @Redirect('/admin/partner')
@@ -37,17 +41,13 @@ export class DashboardAdminController {
   @Get('partner/:id')
   @Render('verified-partner')
   async getPartnerData(@Param('id') id: string) {
-    const data = await this.dasboardAdminService.getPartnerById(
-      this.verifiedPartnerCollection,
-      id,
-    );
+    const data: RegisterUserModel =
+      await this.dasboardAdminService.getPartnerById(
+        this.verifiedPartnerCollection,
+        id,
+      );
 
-    const imageURL =
-      'https://storage.googleapis.com/tracker-64690.appspot.com/company-assets/Amati_Indonesia/amati-logo.png';
-
-    // Fetch the image from the URL and convert it to base64
-    const response = await axios.get(imageURL, { responseType: 'arraybuffer' });
-    const image = Buffer.from(response.data, 'binary').toString('base64');
+    const image = await this.dasboardAdminService.loadImage(data.logo);
 
     return { data, image };
   }
@@ -68,22 +68,19 @@ export class DashboardAdminController {
       this.unverifiedPartnerCollection,
       id,
     );
-    const response = await axios.get(data.logo, {
-      responseType: 'arraybuffer',
-    });
-    const image = Buffer.from(response.data, 'binary').toString('base64');
-    console.log(data);
+    const image = await this.dasboardAdminService.loadImage(data.logo);
 
     return { data, image };
   }
 
   @Post('approval/:id')
-  async approvePartner(@Param('id') id: string) {
+  async approvePartner(@Param('id') id: string, @Res() res: Response) {
     await this.dasboardAdminService.approved(
       this.unverifiedPartnerCollection,
       this.verifiedPartnerCollection,
       id,
     );
+    res.redirect('/admin/approval');
   }
 
   @Get('access')
@@ -98,7 +95,13 @@ export class DashboardAdminController {
 
   @Redirect('/admin/access')
   @Post('access')
-  async CreateApprover(@Body(new ValidationPipe()) body: ApproverDTO) {
-    await this.dasboardAdminService.createApproverUser(body);
+  async CreateUserRole(@Body(new ValidationPipe()) body: ApproverDTO) {
+    await this.adminAccessService.createUserRole(body);
+  }
+
+  @Post('access/delete')
+  async DeleteUserRole(@Body('email') email: string, @Res() res: Response) {
+    await this.adminAccessService.deleteUserRole(email);
+    res.redirect('/admin/access');
   }
 }
