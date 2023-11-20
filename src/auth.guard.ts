@@ -25,7 +25,7 @@ export class CookieAuthGuard implements CanActivate {
       try {
         const decodedToken = await admin
           .auth()
-          .verifyIdToken(TokenCookie.idToken);
+          .verifyIdToken(TokenCookie.idToken, true);
         if (decodedToken.uid) {
           return true;
         }

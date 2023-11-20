@@ -4,7 +4,6 @@ import {
   Controller,
   FileTypeValidator,
   Get,
-  MaxFileSizeValidator,
   ParseFilePipe,
   Post,
   Render,
@@ -39,11 +38,15 @@ export class RegisterController {
     logo: Express.Multer.File,
     @Res() res: Response,
   ) {
-    const { businessName } = body;
+    const { email, businessName } = body;
+
+    if (this.registerService.checkExistingUser(email)) {
+      return 'user already exist';
+    }
 
     try {
       logo.originalname = 'logo.png';
-
+      // check if user already partner/admin/approval
       const image = await this.registerService.storeImage(
         `${businessName}/logo`,
         logo,

@@ -7,6 +7,18 @@ export class RegisterService {
   private usersCollection: string = 'users';
   private unapprovedCollection: string = 'unverifiedPartner';
 
+  async checkExistingUser(user: string): Promise<boolean> {
+    const userRef = await admin
+      .firestore()
+      .collection(this.usersCollection)
+      .doc(user)
+      .get();
+
+    if (userRef.exists) {
+      return true;
+    }
+  }
+
   // handle user register user to make disabled account, and create ticket to be partner
   async storeImage(location: string, file: Express.Multer.File) {
     if (!file) {
