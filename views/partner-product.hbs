@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Bananalem0n">
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/icons/bootstrap-icon/bootstrap-icons.css" rel="stylesheet">
+  <title>AMATI Indonesia dashboard WebApp</title>
+
+
+  <!-- Custom styles for this template -->
+  <link href="/assets/css/dashboard.css" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/product.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body>
+
+  <header class="navbar navbar-dark sticky-top amati-green flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-4 py-3" href="#">AMATI Indonesia</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {{!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> --}}
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="sign-out px-3 py-3" href="#" data-bs-toggle="modal" data-bs-target="#signOutModal">Sign Out</a>
+      </div>
+    </div>
+    <!-- Sign Out Confirmation Modal -->
+  </header>
+
+  <div class="modal fade" id="signOutModal" tabindex="-1" aria-labelledby="signOutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="button">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signOutModalLabel">Confirm Sign Out</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to sign out?
+        </div>
+        <div class="modal-footer">
+          <a href="http://localhost:3000/signout" class="btn btn-primary">Sign Out</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/partner">
+                Home
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link active" href="#">
+                Products
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/partner/history" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                History
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link" href="#" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                Profiles
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 h-100 ">
+        <div class="grid grid-flow-col auto-cols-max mt-4 justify-content-center">
+          <div
+            class="d-flex flex-row border border-sky-500 rounded-4 product-container gap-32 justify-content-between align-items-center px-5">
+            <img class="img-fluid mx-3" src="/assets/amati-logo.png" alt="" srcset="" width="100px">
+            <p class="fs-5">Tumbler Adinata</p>
+            <p class="fs-5">tumbler, wood,handcrafted</p>
+            <p class="fs-5">500 pcs</p>
+            <p class="fs-5">250.000</p>
+            <a href="" aria-details="details">
+              <svg class="" width="40" height="10" viewBox="0 0 40 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="5" cy="5" r="5" fill="#179473" />
+                <circle cx="20" cy="5" r="5" fill="#179473" />
+                <circle cx="35" cy="5" r="5" fill="#179473" />
+              </svg>
+            </a>
+          </div>
+          
+        </div>
+      </main>
+    </div>
+
+
+
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+      integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+      integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+      crossorigin="anonymous"></script>
+    <script src="/assets/js/dashboard.js"></script>
+</body>
+
+</html>
