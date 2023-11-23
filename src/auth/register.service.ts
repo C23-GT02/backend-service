@@ -40,7 +40,7 @@ export class RegisterService {
     // Get the public URL of the uploaded file
     const [url] = await firebaseFile.getSignedUrl({
       action: 'read',
-      expires: '03-09-2491', // Replace with an appropriate expiration date
+      expires: '03-09-2999', // Replace with an appropriate expiration date
     });
 
     // Return the public URL to the client

@@ -40,8 +40,10 @@ export class RegisterController {
   ) {
     const { email, businessName } = body;
 
-    if (this.registerService.checkExistingUser(email)) {
-      return 'user already exist';
+    console.log(body);
+
+    if (!this.registerService.checkExistingUser(email)) {
+      res.send('user already exist').status(401);
     }
 
     try {
@@ -83,23 +85,33 @@ export class LoginController {
     @Body() body: LoginUserModel,
     @Res({ passthrough: true }) res: Response,
   ) {
-    // Authenticate the user and obtain the necessary data
-    const data = await this.loginService.loginUser(body);
-    // Create a session cookie using Firebase Admin SDK
-    const sessionCookie = await admin
-      .auth()
-      .createSessionCookie(data.idToken, { expiresIn: this.duration }); // counted in miliseconds
-    // Set 'id' and 'session' cookies with the obtained data
-    res.cookie('id', data, this.cookieOptions);
-    res.cookie('session', sessionCookie, this.cookieOptions);
-    // Redirect to the '/dashboard' page
-    if (data.role == 'admin' || data.role == 'approver') {
-      res.redirect('/admin');
-    } else if (data.role == 'partner') {
-      res.redirect('/partner');
-      // res.redirect('partner');
+    try {
+      // Authenticate the user and obtain the necessary data
+      const data = await this.loginService.loginUser(body);
+      // Create a session cookie using Firebase Admin SDK
+      const sessionCookie = await admin
+        .auth()
+        .createSessionCookie(data.idToken, { expiresIn: this.duration }); // counted in milliseconds
+
+      // Set 'id' cookie with a simple value
+      res.cookie('id', data, this.cookieOptions);
+
+      // Set 'session' cookie with the session cookie value
+      res.cookie('session', sessionCookie, this.cookieOptions);
+
+      // Redirect to the appropriate page and return to avoid further execution
+      if (data.role === 'admin' || data.role === 'approver') {
+        return res.redirect('/admin');
+      } else if (data.role === 'partner') {
+        return res.redirect('/partner');
+      } else {
+        return res.redirect('/register');
+      }
+    } catch (error) {
+      // Handle authentication errors
+      console.error(error);
+      return res.status(401).send('Authentication failed');
     }
-    res.redirect('/register');
   }
 
   // Handle GET requests to check for existing cookies

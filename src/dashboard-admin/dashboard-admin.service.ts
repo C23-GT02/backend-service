@@ -83,6 +83,7 @@ export class DashboardAdminService {
           email: data.email,
           name: data.displayName,
           roles: Role.Partner,
+          businessName: data.businessName,
           uuid: data.uuid,
         });
 

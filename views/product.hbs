@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Image Upload</title>
+</head>
+<body>
+
+  <h2>Upload Product</h2>
+
+  <form action="" method="post" enctype="multipart/form-data">
+    <label for="name">Product Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    
+    <label for="deskripsi">Product Description:</label>
+    <textarea id="deskripsi" name="deskripsi" required></textarea>
+    <br>
+
+    <label for="images">Select Images:</label>
+    <input type="file" id="images" name="images" accept="image/*" multiple required>
+    <br>
+
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock" required>
+    <br>
+
+    <label for="harga">Price:</label>
+    <input type="number" id="harga" name="harga" required>
+    <br>
+
+    <label for="tags">Tags (comma-separated):</label>
+    <input type="text" id="tags" name="tags" required>
+    <br>
+
+    <label for="material">Material:</label>
+    <input type="text" id="material" name="material" required>
+    <br>
+
+    <label for="proses">Processing:</label>
+    <input type="text" id="proses" name="proses" required>
+    <br>
+
+    <label for="packaging">Packaging:</label>
+    <input type="text" id="packaging" name="packaging" required>
+    <br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+</body>
+</html>
