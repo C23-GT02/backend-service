@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tags Input</title>
+    <style>
+        #tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <label for="tagInput">Add Tags:</label>
+        <input type="text" id="tagInput" placeholder="Type and press Enter">
+    </div>
+
+    <div id="tags-container">
+        <!-- Tags will be added here dynamically -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tagInput = document.getElementById("tagInput");
+            const tagsContainer = document.getElementById("tags-container");
+
+            tagInput.addEventListener("keydown", function (event) {
+                if (event.key === "Enter" && tagInput.value.trim() !== "") {
+                    addTag(tagInput.value.trim());
+                    tagInput.value = "";
+                }
+            });
+
+            function addTag(tagText) {
+                const tagElement = document.createElement("div");
+                tagElement.classList.add("tag");
+                tagElement.textContent = tagText;
+
+                const removeButton = document.createElement("span");
+                removeButton.innerHTML = "&times;"; // × symbol for "times"
+                removeButton.classList.add("tag-remove");
+                removeButton.addEventListener("click", function () {
+                    tagsContainer.removeChild(tagElement);
+                });
+
+                tagElement.appendChild(removeButton);
+                tagsContainer.appendChild(tagElement);
+            }
+        });
+    </script>
+
+</body>
+</html>
