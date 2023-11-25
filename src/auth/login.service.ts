@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginUserModel } from './login.model';
+import { LoginUserModel } from '../models/login.model';
 import { firebase } from 'src/firebase.config';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { admin } from 'src/main';

@@ -12,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
-import { LoginUserModel, RegisterUserModel } from './login.model';
+import { LoginUserModel, RegisterUserModel } from '../models/login.model';
 import { admin } from 'src/main';
 import { RegisterService } from './register.service';
 import { LoginService } from './login.service';

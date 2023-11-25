@@ -9,6 +9,8 @@ import { DashboardAdminService } from './dashboard-admin/dashboard-admin.service
 import { AdminAccessService } from './dashboard-admin/access.service';
 import { DashboardPartnerController } from './dashboard-partner/dashboard-partner.controller';
 import { DashboardPartnerService } from './dashboard-partner/dashboard-partner.service';
+import { QrCodeService } from './services/qrCode.service';
+import { StorageService } from './services/storage.service';
 
 @Module({
   imports: [],
@@ -26,6 +28,8 @@ import { DashboardPartnerService } from './dashboard-partner/dashboard-partner.s
     DashboardAdminService,
     AdminAccessService,
     DashboardPartnerService,
+    QrCodeService,
+    StorageService,
   ],
 })
 export class AppModule {}

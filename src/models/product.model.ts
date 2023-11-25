@@ -9,11 +9,12 @@ export class createProductModel {
   images: string[];
 
   @IsNumberString()
-  stock;
+  stock: any;
 
   @IsNumberString()
-  harga;
+  harga: any;
 
+  @IsString()
   tags: any;
 
   @IsString()
@@ -24,4 +25,6 @@ export class createProductModel {
 
   @IsString()
   packaging: string;
+
+  qrcodeURL?: any;
 }

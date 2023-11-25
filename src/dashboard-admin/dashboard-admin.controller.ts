@@ -10,9 +10,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { DashboardAdminService } from './dashboard-admin.service';
-import { ApproverDTO } from './access.model';
+import { ApproverDTO } from '../models/access.model';
 import { Response } from 'express';
-import { RegisterUserModel } from 'src/auth/login.model';
+import { RegisterUserModel } from 'src/models/login.model';
 import { AdminAccessService } from './access.service';
 @Controller('admin')
 export class DashboardAdminController {

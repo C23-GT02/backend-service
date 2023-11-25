@@ -3,73 +3,124 @@ import {
   Controller,
   FileTypeValidator,
   Get,
-  Param,
   ParseFilePipe,
   Post,
   Render,
   Req,
+  Res,
   UploadedFiles,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { DashboardPartnerService } from './dashboard-partner.service';
-import { createProductModel } from './product.model';
+import { createProductModel } from '../models/product.model';
 import { RegisterService } from 'src/auth/register.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { idCookie } from 'src/auth/cookies.model';
-import { CookieAuthGuard } from 'src/auth.guard';
-import { RolesGuard } from 'src/auth/guard/roles.guard';
-import { Roles } from 'src/auth/guard/roles.decorator';
-import { Role } from 'src/auth/guard/roles.enum';
+import { QrCodeService } from '../services/qrCode.service';
+import { StorageService } from 'src/services/storage.service';
+import { admin } from 'src/main';
+import { nanoid } from 'nanoid';
 
 @Controller('partner')
 export class DashboardPartnerController {
   constructor(
-    private partnerService: DashboardPartnerService,
-    private registerService: RegisterService,
+    private readonly partnerService: DashboardPartnerService,
+    private readonly registerService: RegisterService,
+    private readonly qrCodeService: QrCodeService,
+    private readonly storageService: StorageService,
   ) {}
 
-  @UseGuards(CookieAuthGuard, RolesGuard)
-  @Roles(Role.Partner)
+  private partnerCollection: string = 'verifiedPartner';
+  private productsCollection: string = 'products';
+  // @UseGuards(CookieAuthGuard, RolesGuard)
+  // @Roles(Role.Partner)
   // @Render('partner-product')
   @Render('product')
   @Get()
-  async partnerProduct() {}
+  async partnerProduct(@Req() req: Request, @Res() res: Response) {
+    // const { businessName }: idCookie = req.signedCookies.id;
+    // // if (businessName != null) {
+    // //   res.redirect(`partner/${businessName}`);
+    // // } else {
+    // //   return 'partner not found';
+    // // }
+  }
 
   @Post()
-  @UseInterceptors(FilesInterceptor('images', 10))
+  @UseInterceptors(FilesInterceptor('images', 10)) // html name attribute and max image uploaded
   async registerUser(
-    @Body() body: createProductModel,
     @UploadedFiles(
       new ParseFilePipe({
         validators: [new FileTypeValidator({ fileType: 'image' })],
       }),
     )
     images: Express.Multer.File[],
+    @Body() body: createProductModel,
     @Req() req: Request,
   ) {
-    console.log(body);
-    body.harga = parseInt(body.harga);
+    const qrOutputFilename = 'qr-code';
+    body.harga = parseInt(body.harga); // convert string to number
+    body.stock = parseInt(body.stock);
+
+    const { harga, name, packaging, proses, deskripsi, material, tags } = body;
+
+    const qrPayload = {
+      name,
+      harga,
+      deskripsi,
+      tags,
+      material,
+      proses,
+      packaging,
+    };
+
     const { businessName }: idCookie = req.signedCookies.id;
     const path = `${businessName}/products/${body.name}`;
+    const qrPath = `${path}/${body.name}`;
+    const qrBatchPath = `${path}/${body.name}`;
 
+    const data: any[] = [];
+
+    for (let i = 0; i < body.stock; i++) {
+      const id = nanoid(10);
+      data.push({
+        id,
+        name: body.name,
+      });
+      await admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(businessName)
+        .collection(this.productsCollection)
+        .doc(body.name)
+        .collection('product-id')
+        .doc(id)
+        .set(data[i]);
+    }
+
+    // return imageURL to be stored in array
     const imageUrls = await Promise.all(
       images.map(async (image) => {
         return await this.registerService.storeImage(path, image);
       }),
     );
-    body.tags = body.tags.split(',').map((val) => val);
+
     body.images = imageUrls;
 
-    const data = await this.partnerService.createProduct(businessName, body);
+    // make the tags to be array type
+    body.tags = await body.tags.split(',').map((val) => val);
 
-    return data;
-  }
+    const qr = await this.qrCodeService.generateQrCode(
+      JSON.stringify(qrPayload),
+      qrOutputFilename,
+    );
+    body.qrcodeURL = await this.storageService.storeFile(qr, qrPath);
 
-  @Get(':id')
-  async Product(@Param('id') id: string) {
-    const data = await this.partnerService.getAllPartnerProducts(id);
-    return data;
+    // Generate batch QR codes
+    await this.qrCodeService.generateBatchQrCode(body.stock, data, qrBatchPath);
+
+    const create = await this.partnerService.createProduct(businessName, body);
+    return create;
   }
 }

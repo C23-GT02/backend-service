@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterUserModel } from './login.model';
+import { RegisterUserModel } from '../models/login.model';
 import { admin } from 'src/main';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class RegisterService {
   }
 
   // handle user register user to make disabled account, and create ticket to be partner
-  async storeImage(location: string, file: Express.Multer.File) {
+  async storeImage(location: string, file: Express.Multer.File | any) {
     if (!file) {
       return 'No file uploaded.';
     }
@@ -31,7 +31,10 @@ export class RegisterService {
     const imageFileName = `${location}/${file.originalname}`;
     const firebaseFile = bucket.file(imageFileName);
 
-    await firebaseFile.save(file.buffer, {
+    // Wait for the promise to resolve before using the buffer
+    const buffer = await file.buffer;
+
+    await firebaseFile.save(buffer, {
       metadata: {
         contentType: file.mimetype,
       },
