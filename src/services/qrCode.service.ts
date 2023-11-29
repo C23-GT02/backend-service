@@ -7,11 +7,11 @@ import { StorageContentType } from 'src/models/content-type.model';
 @Injectable()
 export class QrCodeService {
   constructor(private readonly storageService: StorageService) {}
-  private qrUrl = 'https://qrcode3.p.rapidapi.com/qrcode/text';
-  private rapidAPIKey = '763b527758msh40ffb3c32ecd0bfp126d85jsn384e999f518a';
-  private rapidHost = 'qrcode3.p.rapidapi.com';
+  private readonly qrUrl = process.env.qrURL;
+  private readonly rapidAPIKey = process.env.rapidAPIKey;
+  private readonly rapidHost = process.env.rapidHost;
 
-  async generateQrCode(data: any, output: string) {
+  async generateQrCode(data: any, output: string = '') {
     const options: any = {
       method: 'POST',
       url: this.qrUrl,

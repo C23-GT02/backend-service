@@ -12,7 +12,7 @@ import {
 import { DashboardAdminService } from './dashboard-admin.service';
 import { ApproverDTO } from '../models/access.model';
 import { Response } from 'express';
-import { RegisterUserModel } from 'src/models/login.model';
+import { RegisterUserModel } from 'src/models/register.model';
 import { AdminAccessService } from './access.service';
 @Controller('admin')
 export class DashboardAdminController {
@@ -95,7 +95,9 @@ export class DashboardAdminController {
 
   @Redirect('/admin/access')
   @Post('access')
-  async CreateUserRole(@Body(new ValidationPipe()) body: ApproverDTO) {
+  async CreateUserRole(
+    @Body(new ValidationPipe({ transform: true })) body: ApproverDTO,
+  ) {
     await this.adminAccessService.createUserRole(body);
   }
 

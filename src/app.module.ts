@@ -11,6 +11,7 @@ import { DashboardPartnerController } from './dashboard-partner/dashboard-partne
 import { DashboardPartnerService } from './dashboard-partner/dashboard-partner.service';
 import { QrCodeService } from './services/qrCode.service';
 import { StorageService } from './services/storage.service';
+import { ApiController } from './api/api.controller';
 
 @Module({
   imports: [],
@@ -20,6 +21,7 @@ import { StorageService } from './services/storage.service';
     RegisterController,
     DashboardAdminController,
     DashboardPartnerController,
+    ApiController,
   ],
   providers: [
     AppService,

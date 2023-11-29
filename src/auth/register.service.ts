@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { RegisterUserModel } from '../models/login.model';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { admin } from 'src/main';
+import { RegisterModelMobile, RegisterUserModel } from 'src/models/register.model';
+import { Role } from './guard/roles.enum';
 
 @Injectable()
 export class RegisterService {
@@ -66,7 +67,7 @@ export class RegisterService {
       const user = await admin.auth().createUser({
         displayName: username,
         email,
-        password: password,
+        password,
         disabled: true,
       });
 
@@ -89,6 +90,38 @@ export class RegisterService {
       return data;
     } catch (error) {
       return error;
+    }
+  }
+
+  async registerUserMobile(data: RegisterModelMobile) {
+    try {
+      const { firstname, lastname, email, password } = data;
+
+      const user = await admin.auth().createUser({
+        displayName: `${firstname} ${lastname}`,
+        email: email,
+        password,
+      });
+
+      await admin.firestore().collection('users').doc(email).set({
+        email,
+        name: user.displayName,
+        roles: Role.User,
+        uuid: user.uid,
+      });
+
+      return {
+        uuid: user.uid,
+        name: user.displayName,
+        email: email,
+        role: Role.User,
+      };
+    } catch (error) {
+      if (error.code === 'auth/email-already-exists') {
+        throw new ConflictException('User already exists');
+      }
+
+      throw new BadRequestException('User registration failed', error.message);
     }
   }
 }

@@ -59,7 +59,6 @@ export class DashboardPartnerController {
     @Body() body: createProductModel,
     @Req() req: Request,
   ) {
-    const qrOutputFilename = 'qr-code';
     body.harga = parseInt(body.harga); // convert string to number
     body.stock = parseInt(body.stock);
 
@@ -113,7 +112,6 @@ export class DashboardPartnerController {
 
     const qr = await this.qrCodeService.generateQrCode(
       JSON.stringify(qrPayload),
-      qrOutputFilename,
     );
     body.qrcodeURL = await this.storageService.storeFile(qr, qrPath);
 

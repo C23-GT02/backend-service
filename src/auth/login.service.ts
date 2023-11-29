@@ -2,7 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginUserModel } from '../models/login.model';
 import { firebase } from 'src/firebase.config';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { admin } from 'src/main';
+import { admin, duration } from 'src/main';
+import { idCookie } from './cookies.model';
 
 @Injectable()
 export class LoginService {
@@ -84,6 +85,21 @@ export class LoginService {
       // You might want to log the error or handle it differently
       console.error('Login error:', error);
       throw new UnauthorizedException('Login failed'); // Or return a more specific error message
+    }
+  }
+
+  async handleAuthentication(body: LoginUserModel) {
+    try {
+      const data: idCookie = await this.loginUser(body);
+      const sessionCookie: string = await admin
+        .auth()
+        .createSessionCookie(data.idToken, { expiresIn: duration });
+
+      // You can customize the response based on the controller
+      return { data, sessionCookie };
+    } catch (error) {
+      console.error(error);
+      return error;
     }
   }
 }
