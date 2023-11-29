@@ -1,0 +1,168 @@
+openapi: '3.0.2'
+info:
+  title: Geotag API Documentations
+  description: this API just a references how the system on our apps is work, there might be some different Responses between the docs and Apps
+  version: 'BETA'
+servers:
+  - url: http://localhost:3000/api
+  - url: http://localhost:3000
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication System
+      summary: Sign-In to the partner/Admin Dashboard
+      operationId: signin
+      requestBody:
+        description: Login based on User Role
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          description: OK, set cookies with user data
+        '401':
+          description: Authentication failed
+
+  /register:
+    post:
+      tags:
+        - Authentication System
+      summary: Register a new Partner
+      operationId: register-web
+      requestBody:
+        description: Create a new user account for Partner
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPartner'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RegisterPartner'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterPartner'
+        required: true
+      responses:
+        '200':
+          description: Created, redirected to login.
+        '409':
+          description: User already exists
+        '500':
+          description: Internal Server Error
+
+  /register/mobile:
+    post:
+      tags:
+        - Authentication System
+      summary: Register a new user for Mobile User
+      operationId: register-mobile
+      requestBody:
+        description: Create a new user account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterMobile'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RegisterMobile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterMobile'
+        required: true
+      responses:
+        '200':
+          description: Created, redirected to login.
+        '400':
+          description: User registration failed
+        '409':
+          description: User already exists
+        '500':
+          description: Internal Server Error
+
+components:
+  schemas:
+    Login:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: string
+          example: email@domain.com
+        password:
+          type: string
+          minimum: 6
+          format: password
+          example: password123
+
+    RegisterPartner:
+      type: object
+      required:
+        - username
+        - email
+        - password
+        - businessName
+        - nib
+        - telephone
+        - logo
+      properties:
+        username:
+          type: string
+          format: string
+        email:
+          type: string
+          format: string
+        password:
+          type: string
+          minimum: 6
+          format: password
+        businessName:
+          type: string
+          format: string
+        nib:
+          type: string
+          format: string
+        telephone:
+          type: string
+          format: string
+          description: must be a valid phone number.
+        deskripsi:
+          type: string
+          format: string
+        logo:
+          type: string
+          format: binary
+          description: the image is handler by multer and get stored in cloud storage, return a url.
+
+    RegisterMobile:
+      type: object
+      required:
+        - firstname
+        - lastname
+        - email
+        - password
+      properties:
+        firstname:
+          type: string
+          format: string
+        lastname:
+          type: string
+          format: string
+        email:
+          type: string
+          format: string
+        password:
+          type: string
+          minimum: 6
+          format: password
