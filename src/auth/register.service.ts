@@ -53,7 +53,6 @@ export class RegisterService {
       action: 'read',
       expires: '03-09-2999', // Replace with an appropriate expiration date
     });
-
     // Return the public URL to the client
     return url;
   }

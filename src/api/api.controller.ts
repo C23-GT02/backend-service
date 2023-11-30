@@ -28,7 +28,7 @@ export class ApiController {
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
   ) {}
-
+  // Begin Auth Controller Route
   @Post('auth/login')
   async LoginUser(
     @Body() body: LoginUserModel,
@@ -60,7 +60,7 @@ export class ApiController {
   ) {
     try {
       const userData = await this.registerService.registerUserMobile(data);
-      res.status(HttpStatus.OK).send({
+      res.status(HttpStatus.CREATED).send({
         message: 'User created successfully',
         data: userData,
       });
@@ -76,34 +76,53 @@ export class ApiController {
     }
   }
 
+  // Begin User Controller Route
   @Post('user/edit')
   @UseInterceptors(FileInterceptor('image'))
   async editUserAuth(
     @Body() data: editUserMobileModel,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 100000 }),
-          new FileTypeValidator({ fileType: 'image' }),
-        ],
+        validators: [new FileTypeValidator({ fileType: 'image' })],
       }),
     )
-    image: Express.Multer.File,
+    image: Express.Multer.File = null,
+    @Res() res?: Response,
   ) {
-    const { uid, email, photoURL, displayName } = data;
+    const { uid, email, displayName, phoneNumber } = data;
     const location = `user/${email}`;
+    const payload: any = {};
+
     try {
-      if (image !== null) {
-        data.photoURL = await this.registerService.storeImage(location, image);
-        console.log(data.photoURL);
+      if (displayName !== null && displayName !== undefined) {
+        payload.displayName = displayName;
       }
-      await admin.auth().updateUser(uid, {
-        displayName,
-        photoURL,
-      });
-      return { message: 'user success edited' };
+
+      if (image !== null && image !== undefined) {
+        data.photoURL = await this.registerService.storeImage(location, image);
+        payload.photoURL = data.photoURL;
+      }
+
+      if (phoneNumber !== null && phoneNumber !== undefined) {
+        payload.phoneNumber = phoneNumber;
+      }
+
+      await admin.firestore().collection('users').doc(email).update(payload);
+      await admin.auth().updateUser(uid, payload);
+
+      if (res) {
+        res
+          .status(HttpStatus.CREATED)
+          .send({ message: 'User successfully edited' });
+      }
     } catch (error) {
-      return error;
+      if (res) {
+        res
+          .status(HttpStatus.BAD_REQUEST)
+          .send({ message: 'Failed to edit user', error });
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -112,7 +131,7 @@ export class ApiController {
     try {
       console.log(email);
       const auth = await getAuth(firebase);
-      await sendPasswordResetEmail(auth, email).then((link) => {
+      await sendPasswordResetEmail(auth, email).then(() => {
         return 'reset password links sucessfully sent';
       });
     } catch (error) {

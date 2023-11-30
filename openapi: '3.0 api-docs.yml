@@ -17,18 +17,11 @@ paths:
       summary: Sign-In to the Mobile Apps
       operationId: Sign In
       requestBody:
-        description: Login based on User Role
+        description: Login into the application, will return a cookies session and roles on web browser, and return response data on mobile. 
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Login'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Login'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Login'
-        required: true
       responses:
         '200':
           description: OK, set cookies with user data
@@ -44,21 +37,14 @@ paths:
       requestBody:
         description: Create a new user account
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/Register'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Register'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Register'
-        required: true
       responses:
-        '200':
+        '201':
           description: Created, redirected to login.
         '400':
-          description: User registration failed
+          description: Bad Request
         '409':
           description: User already exists
         '500':
@@ -73,19 +59,14 @@ paths:
       requestBody:
         description: Edit Existing User, image must be posted using html forms.
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/Edit User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Edit User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Edit User'
-        required: true
       responses:
         '200':
           description: Edited Succesfully
+        '400':
+          description: Bad Request
         '413':
           description: Payload Too Large
         '500':
@@ -103,13 +84,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Reset Password'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Reset Password'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Reset Password'
-        required: true
       responses:
         '200':
           description: Reset Succesfully
@@ -161,8 +135,6 @@ components:
       required:
         - uid
         - email
-        - displayName
-        - image
       properties:
         uid:
           type: string
@@ -176,6 +148,11 @@ components:
         image:
           type: string
           format: binary
+        phoneNumber:
+          type: string
+          format: string
+          pattern: '^[0-9]{10,15}$'
+          example: +621234567891
 
     Reset Password:
       type: object
@@ -184,4 +161,4 @@ components:
       properties:
         email:
           type: string
-          format: string
+          format: email

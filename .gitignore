@@ -3,7 +3,7 @@
 /node_modules
 /src/firebase.config.ts
 /serviceAccount.json
-
+openapi: '3.0 api-docs.yml
 
 # Logs
 logs
