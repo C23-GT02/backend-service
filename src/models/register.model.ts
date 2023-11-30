@@ -8,17 +8,17 @@ import {
 
 export class RegisterModelMobile {
   @IsString()
-  firstname: string;
-
-  @IsString()
-  lastname: string;
-
-  @IsString()
   @IsEmail()
   email: string;
 
   @IsString()
   password: string;
+
+  @IsString()
+  firstname: string;
+
+  @IsString()
+  lastname: string;
 }
 
 export class RegisterUserModel {

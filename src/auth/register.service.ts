@@ -1,6 +1,13 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { admin } from 'src/main';
-import { RegisterModelMobile, RegisterUserModel } from 'src/models/register.model';
+import {
+  RegisterModelMobile,
+  RegisterUserModel,
+} from 'src/models/register.model';
 import { Role } from './guard/roles.enum';
 
 @Injectable()

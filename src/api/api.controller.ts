@@ -1,18 +1,26 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   HttpException,
   HttpStatus,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import { Role } from 'src/auth/guard/roles.enum';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { LoginService } from 'src/auth/login.service';
 import { RegisterService } from 'src/auth/register.service';
+import { firebase } from 'src/firebase.config';
 import { admin, cookieOptions } from 'src/main';
 import { LoginUserModel } from 'src/models/login.model';
 import { RegisterModelMobile } from 'src/models/register.model';
+import { editUserMobileModel } from 'src/models/user.mobile.model';
 
 @Controller('api')
 export class ApiController {
@@ -65,6 +73,50 @@ export class ApiController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
         message: 'Unexpected error during user registration',
       });
+    }
+  }
+
+  @Post('user/edit')
+  @UseInterceptors(FileInterceptor('image'))
+  async editUserAuth(
+    @Body() data: editUserMobileModel,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 100000 }),
+          new FileTypeValidator({ fileType: 'image' }),
+        ],
+      }),
+    )
+    image: Express.Multer.File,
+  ) {
+    const { uid, email, photoURL, displayName } = data;
+    const location = `user/${email}`;
+    try {
+      if (image !== null) {
+        data.photoURL = await this.registerService.storeImage(location, image);
+        console.log(data.photoURL);
+      }
+      await admin.auth().updateUser(uid, {
+        displayName,
+        photoURL,
+      });
+      return { message: 'user success edited' };
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Post('user/reset')
+  async resetPassword(@Body('email') email: string) {
+    try {
+      console.log(email);
+      const auth = await getAuth(firebase);
+      await sendPasswordResetEmail(auth, email).then((link) => {
+        return 'reset password links sucessfully sent';
+      });
+    } catch (error) {
+      return error;
     }
   }
 }

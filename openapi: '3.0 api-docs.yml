@@ -9,14 +9,13 @@ info:
 
 servers:
   - url: http://localhost:3000/api
-  - url: http://localhost:3000
 paths:
   /auth/login:
     post:
       tags:
         - Authentication System
-      summary: Sign-In to the partner/Admin Dashboard
-      operationId: signin
+      summary: Sign-In to the Mobile Apps
+      operationId: Sign In
       requestBody:
         description: Login based on User Role
         content:
@@ -41,7 +40,7 @@ paths:
       tags:
         - Authentication System
       summary: Register a new user for Mobile User
-      operationId: register-mobile
+      operationId: Register Mobile
       requestBody:
         description: Create a new user account
         content:
@@ -65,6 +64,60 @@ paths:
         '500':
           description: Internal Server Error
 
+  /user/edit:
+    post:
+      tags:
+        - User Profiles
+      summary: Edit Information about User Authentication
+      operationId: EditUser
+      requestBody:
+        description: Edit Existing User, image must be posted using html forms.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Edit User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Edit User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Edit User'
+        required: true
+      responses:
+        '200':
+          description: Edited Succesfully
+        '413':
+          description: Payload Too Large
+        '500':
+          description: Internal Server Error
+
+  /user/reset:
+    post:
+      tags:
+        - User Profiles
+      summary: Reset User Password with generated links
+      operationId: reserUser
+      requestBody:
+        description: Edit Existing User, image must be posted using html forms.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reset Password'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Reset Password'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Reset Password'
+        required: true
+      responses:
+        '200':
+          description: Reset Succesfully
+        '500':
+          description: Internal Server Error
+
+
+
 components:
   schemas:
     Login:
@@ -75,13 +128,11 @@ components:
       properties:
         email:
           type: string
-          format: string
-          example: email@domain.com
+          format: email
         password:
           type: string
           minimum: 6
           format: password
-          example: password123
 
     Register:
       type: object
@@ -91,16 +142,46 @@ components:
         - email
         - password
       properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minimum: 6
+          format: password
         firstname:
           type: string
           format: string
         lastname:
           type: string
           format: string
+
+    Edit User:
+      type: object
+      required:
+        - uid
+        - email
+        - displayName
+        - image
+      properties:
+        uid:
+          type: string
+          format: uuid
+        email: 
+          type: string
+          format: email
+        displayName:
+          type: string
+          format: string
+        image:
+          type: string
+          format: binary
+
+    Reset Password:
+      type: object
+      required: 
+        - email
+      properties:
         email:
           type: string
           format: string
-        password:
-          type: string
-          minimum: 6
-          format: password
