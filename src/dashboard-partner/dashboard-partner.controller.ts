@@ -1,21 +1,6 @@
-import {
-  Body,
-  Controller,
-  FileTypeValidator,
-  Get,
-  Param,
-  ParseFilePipe,
-  Post,
-  Render,
-  Req,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 import { DashboardPartnerService } from './dashboard-partner.service';
-import { createProductModel } from './product.model';
 import { RegisterService } from 'src/auth/register.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
 
 @Controller('partner')
 export class DashboardPartnerController {
