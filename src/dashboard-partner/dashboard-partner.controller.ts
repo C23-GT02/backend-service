@@ -28,25 +28,11 @@ export class DashboardPartnerController {
   @Get()
   async partnerProduct() {}
 
-  @Post()
-  @UseInterceptors(FileInterceptor('logo'))
-  async registerUser(
-    @Body() body: createProductModel,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'image' })],
-      }),
-    )
-    logo: Express.Multer.File,
-    @Req() req: Request,
-  ) {
-    const cookie = req.signedCookies.
-    // const { image } = body;
-  }
+  @Get('profile')
+  @Render('partner-profile')
+  async partnerProfile() {}
 
-  @Get(':id')
-  async Product(@Param('product') id: string) {
-    const data = await this.partnerService.getAllPartnerProducts(id);
-    return data;
-  }
+  @Get('/edit')
+  @Render('partner-edit')
+  async editPartnerProfile() {}
 }
