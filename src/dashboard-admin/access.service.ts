@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { admin } from 'src/main';
-import { ApproverDTO } from './access.model';
+import { ApproverDTO } from '../models/access.model';
 
 @Injectable()
 export class AdminAccessService {

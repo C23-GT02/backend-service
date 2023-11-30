@@ -6,14 +6,19 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class LoginUserModel {
-  @IsEmail()
+export class RegisterModelMobile {
   @IsString()
+  @IsEmail()
   email: string;
 
-  @MinLength(6)
   @IsString()
   password: string;
+
+  @IsString()
+  firstname: string;
+
+  @IsString()
+  lastname: string;
 }
 
 export class RegisterUserModel {
@@ -42,29 +47,3 @@ export class RegisterUserModel {
 
   logo?: string;
 }
-
-// export class FinalUserModelWithRole {
-//   @IsString()
-//   uuid: string;
-
-//   @IsString()
-//   displayName: string;
-
-//   @IsEmail()
-//   email: string;
-
-//   @IsString()
-//   businessName: string;
-
-//   @IsNumberString()
-//   nib: string;
-
-//   @IsMobilePhone()
-//   telephone: string;
-
-//   @IsString()
-//   deskripsi: string;
-
-//   @IsDateString()
-//   timestamp?: string;
-// }

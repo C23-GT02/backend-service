@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginUserModel } from './login.model';
+import { LoginUserModel } from '../models/login.model';
 import { firebase } from 'src/firebase.config';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { admin } from 'src/main';
+import { admin, duration } from 'src/main';
 import { idCookie } from './cookies.model';
 
 @Injectable()
@@ -48,20 +48,58 @@ export class LoginService {
       const idToken = await userCredential.user.getIdToken(true);
       const { uid } = userCredential.user;
       const role = await this.checkRole(email);
+
       if (role === null) {
         throw new UnauthorizedException(
           'Unauthorized Account for Amati Dashboard',
         );
       }
-      const payload: idCookie = {
+
+      const documentSnapshot = await admin
+        .firestore()
+        .collection(this.userCollection)
+        .doc(email)
+        .get();
+
+      // Initialize businessName outside the if-else block
+      let businessName = null;
+
+      // Check if the document exists
+      if (documentSnapshot.exists) {
+        // Now, businessName will either be the value from the document or null if it doesn't exist
+        businessName = documentSnapshot.data()?.businessName;
+      }
+
+      console.log(businessName);
+
+      const payload = {
         idToken,
         uid,
+        businessName,
         email,
         role,
       };
+
       return payload;
     } catch (error) {
-      throw new UnauthorizedException('Invalid email or password');
+      // You might want to log the error or handle it differently
+      console.error('Login error:', error);
+      throw new UnauthorizedException('Login failed'); // Or return a more specific error message
+    }
+  }
+
+  async handleAuthentication(body: LoginUserModel) {
+    try {
+      const data: idCookie = await this.loginUser(body);
+      const sessionCookie: string = await admin
+        .auth()
+        .createSessionCookie(data.idToken, { expiresIn: duration });
+
+      // You can customize the response based on the controller
+      return { data, sessionCookie };
+    } catch (error) {
+      console.error(error);
+      return error;
     }
   }
 }

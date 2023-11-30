@@ -4,6 +4,7 @@ import {
   Controller,
   FileTypeValidator,
   Get,
+  HttpStatus,
   ParseFilePipe,
   Post,
   Render,
@@ -11,12 +12,13 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { CookieOptions, Response } from 'express';
-import { LoginUserModel, RegisterUserModel } from './login.model';
-import { admin } from 'src/main';
+import { Response } from 'express';
+import { LoginUserModel } from '../models/login.model';
+import { cookieOptions } from 'src/main';
 import { RegisterService } from './register.service';
 import { LoginService } from './login.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { RegisterUserModel } from 'src/models/register.model';
 
 // Define a controller for the '/register' route
 @Controller('register')
@@ -40,12 +42,11 @@ export class RegisterController {
   ) {
     const { email, businessName } = body;
 
-    if (this.registerService.checkExistingUser(email)) {
-      return 'user already exist';
+    if (!this.registerService.checkExistingUser(email)) {
+      return res.status(HttpStatus.CONFLICT).send('User already exists');
     }
 
     try {
-      logo.originalname = 'logo.png';
       // check if user already partner/admin/approval
       const image = await this.registerService.storeImage(
         `${businessName}/logo`,
@@ -53,12 +54,12 @@ export class RegisterController {
       );
       body.logo = image;
       // Store the user data (including the logo) in the database
-      console.log(body);
       await this.registerService.storeUnapprovedUser(body);
       // Redirect to the login page
-      res.redirect('/login');
+      res.status(HttpStatus.OK).redirect('/login');
     } catch (error) {
-      return error;
+      console.error(error); // Log the detailed error for debugging
+      return res.status(500).send('Internal Server Error');
     }
   }
 }
@@ -67,43 +68,43 @@ export class RegisterController {
 @Controller('login')
 export class LoginController {
   constructor(private loginService: LoginService) {}
-  // cookie expiration in day
-  private duration = 1000 * 3600 * 24 * parseInt(process.env.COOKIES_EXP);
-  private cookieOptions: CookieOptions = {
-    maxAge: this.duration,
-    httpOnly: true,
-    signed: true,
-    expires: new Date(Date.now() + this.duration),
-    secure: process.env.ENV_TYPE === 'PROD',
-  };
 
-  // Handle POST requests to set cookies and redirect to '/dashboard'
-  @Post()
-  async setCookie(
-    @Body() body: LoginUserModel,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    // Authenticate the user and obtain the necessary data
-    const data = await this.loginService.loginUser(body);
-    // Create a session cookie using Firebase Admin SDK
-    const sessionCookie = await admin
-      .auth()
-      .createSessionCookie(data.idToken, { expiresIn: this.duration }); // counted in miliseconds
-    // Set 'id' and 'session' cookies with the obtained data
-    res.cookie('id', data, this.cookieOptions);
-    res.cookie('session', sessionCookie, this.cookieOptions);
-    // Redirect to the '/dashboard' page
-    if (data.role == 'admin' || data.role == 'approver') {
-      res.redirect('/admin');
-    } else if (data.role == 'partner') {
-      res.redirect('/partner');
-      // res.redirect('partner');
-    }
-    res.redirect('/register');
-  }
+  private readonly roleRedirects = {
+    admin: '/admin',
+    approver: '/admin', // Redirecting approvers to the same URL as admins
+    partner: '/partner',
+    default: '/register', // Default redirect for other roles
+  };
 
   // Handle GET requests to check for existing cookies
   @Render('login')
   @Get()
-  async getCookie() {}
+  async renderLogin() {}
+
+  // Handle POST requests to set cookies and redirect to '/dashboard'
+  @Post()
+  async LoginUser(
+    @Body() body: LoginUserModel,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    try {
+      // Authenticate the user and obtain the necessary data
+      const { data, sessionCookie } =
+        await this.loginService.handleAuthentication(body);
+
+      // Set 'id' cookie with a simple value
+      res.cookie('id', data, cookieOptions);
+      // Set 'session' cookie with the session cookie value
+      res.cookie('session', sessionCookie, cookieOptions);
+
+      // Redirect to the appropriate page and return to avoid further execution
+      const redirectUrl =
+        this.roleRedirects[data.role] || this.roleRedirects.default;
+      res.redirect(redirectUrl);
+    } catch (error) {
+      // Handle authentication errors
+      console.error(error);
+      return res.status(HttpStatus.UNAUTHORIZED).send('Authentication failed');
+    }
+  }
 }

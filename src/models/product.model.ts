@@ -1,5 +1,4 @@
-import { IsCurrency, IsInt, IsString, IsUrl } from 'class-validator';
-
+import { IsString, IsNumberString } from 'class-validator';
 export class createProductModel {
   @IsString()
   name: string;
@@ -7,17 +6,16 @@ export class createProductModel {
   @IsString()
   deskripsi: string;
 
-  @IsUrl()
-  image: string;
+  images: string[];
 
-  @IsInt()
-  stock: number;
+  @IsNumberString()
+  stock: any;
 
-  @IsCurrency()
-  harga: string;
+  @IsNumberString()
+  harga: any;
 
   @IsString()
-  tags: string;
+  tags: any;
 
   @IsString()
   material: string;
@@ -27,4 +25,6 @@ export class createProductModel {
 
   @IsString()
   packaging: string;
+
+  qrcodeURL?: any;
 }

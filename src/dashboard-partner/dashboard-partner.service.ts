@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { admin } from 'src/main';
-import { createProductModel } from './product.model';
+import { createProductModel } from '../models/product.model';
 
 @Injectable()
 export class DashboardPartnerService {
@@ -29,14 +29,14 @@ export class DashboardPartnerService {
   async createProduct(partner: string, product: createProductModel) {
     return new Promise(async (resolve, reject) => {
       try {
-        const collectionRef = admin
+        admin
           .firestore()
           .collection(this.partnerCollection)
           .doc(partner)
           .collection(this.productCollection)
-          .doc(product.name);
-        const data = await collectionRef.set(product);
-        resolve(data);
+          .doc(product.name)
+          .set(product);
+        resolve('product berhasil dibuat');
       } catch (error) {
         reject(error);
       }

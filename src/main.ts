@@ -10,11 +10,21 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as http from 'http';
 import 'dotenv/config';
+import { CookieOptions } from 'express';
 
 export const admin = fs.initializeApp({
   credential: fs.credential.cert('serviceAccount.json'),
   storageBucket: 'gs://tracker-64690.appspot.com/',
 });
+
+export const duration = 1000 * 3600 * 24 * parseInt(process.env.COOKIES_EXP);
+export const cookieOptions: CookieOptions = {
+  maxAge: duration,
+  httpOnly: true,
+  signed: true,
+  expires: new Date(Date.now() + duration),
+  secure: process.env.ENV_TYPE === 'PROD',
+};
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -23,14 +33,10 @@ async function bootstrap() {
 
   // renderer global config
   app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.useStaticAssets(
-    'https://storage.googleapis.com/tracker-64690.appspot.com/',
-  );
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
 
   // security and validation global config
-  // main.ts or AppModule
   app.enableCors({
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
