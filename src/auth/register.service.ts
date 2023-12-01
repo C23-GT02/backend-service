@@ -1,13 +1,6 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { admin } from 'src/main';
-import {
-  RegisterModelMobile,
-  RegisterUserModel,
-} from 'src/models/register.model';
+import { RegisterModelMobile, RegisterUserModel } from 'src/models/register.model';
 import { Role } from './guard/roles.enum';
 
 @Injectable()
@@ -16,11 +9,7 @@ export class RegisterService {
   private unapprovedCollection: string = 'unverifiedPartner';
 
   async checkExistingUser(user: string): Promise<boolean> {
-    const userRef = await admin
-      .firestore()
-      .collection(this.usersCollection)
-      .doc(user)
-      .get();
+    const userRef = await admin.firestore().collection(this.usersCollection).doc(user).get();
 
     if (userRef.exists) {
       return true;
@@ -59,16 +48,7 @@ export class RegisterService {
 
   async storeUnapprovedUser(userData: RegisterUserModel) {
     try {
-      const {
-        username,
-        email,
-        password,
-        businessName,
-        nib,
-        telephone,
-        deskripsi,
-        logo,
-      } = userData;
+      const { username, email, password, businessName, nib, telephone, deskripsi, logo } = userData;
 
       const user = await admin.auth().createUser({
         displayName: username,
@@ -88,11 +68,7 @@ export class RegisterService {
         logo,
       };
 
-      await admin
-        .firestore()
-        .collection(this.unapprovedCollection)
-        .doc(businessName)
-        .set(data);
+      await admin.firestore().collection(this.unapprovedCollection).doc(businessName).set(data);
       return data;
     } catch (error) {
       return error;

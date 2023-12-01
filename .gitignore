@@ -36,3 +36,5 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+openapi: '3.0 api-docs.yml
+openapi: '3.0 api-docs.yml

@@ -1,8 +1,11 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: Geotag Mobile Apps API Documentations
   description: this API just a references how the system on our apps is work, there might be some different Responses between the docs and Apps
-  version: 'BETA'
+  version: "BETA"
+  contact:
+    name: C23-GT02 (Ukasyah Nata)
+    email: c128bsy3500@bangkit.academy
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
@@ -17,15 +20,15 @@ paths:
       summary: Sign-In to the Mobile Apps
       operationId: Sign In
       requestBody:
-        description: Login into the application, will return a cookies session and roles on web browser, and return response data on mobile. 
+        description: Login into the application, will return a cookies session and roles on web browser, and return response data on mobile.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Login'
+              $ref: "#/components/schemas/Login"
       responses:
-        '200':
+        "200":
           description: OK, set cookies with user data
-        '401':
+        "401":
           description: Authentication failed
 
   /auth/register:
@@ -39,16 +42,42 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Register'
+              $ref: "#/components/schemas/Register"
       responses:
-        '201':
+        "201":
           description: Created, redirected to login.
-        '400':
+        "400":
           description: Bad Request
-        '409':
+        "409":
           description: User already exists
-        '500':
+        "500":
           description: Internal Server Error
+
+  /user:
+    get:
+      tags:
+        - User Profiles
+      summary: Retrieve user data by email
+      parameters:
+        - in: query
+          name: email
+          required: true
+          description: The email address of the user
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get User Response'
+        "404":
+          description: User not found
+          content:
+            application/json:
+              example:
+                error: "User not found"
 
   /user/edit:
     post:
@@ -61,15 +90,19 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Edit User'
+              $ref: "#/components/schemas/Edit User"
       responses:
-        '200':
+        "200":
           description: Edited Succesfully
-        '400':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Edit User Response"
+        "400":
           description: Bad Request
-        '413':
+        "413":
           description: Payload Too Large
-        '500':
+        "500":
           description: Internal Server Error
 
   /user/reset:
@@ -83,14 +116,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Reset Password'
+              $ref: "#/components/schemas/Reset Password"
       responses:
-        '200':
+        "200":
           description: Reset Succesfully
-        '500':
+        "500":
           description: Internal Server Error
-
-
 
 components:
   schemas:
@@ -130,6 +161,30 @@ components:
           type: string
           format: string
 
+    Get User Response:
+      type: object
+      required:
+        - uid
+        - email
+      properties:
+        uid:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+          format: string
+        photoUrl:
+          type: string
+          format: uri
+        phoneNumber:
+          type: string
+          format: string
+          pattern: "^[0-9]{10,15}$"
+          example: +621234567891
+
     Edit User:
       type: object
       required:
@@ -139,7 +194,7 @@ components:
         uid:
           type: string
           format: uuid
-        email: 
+        email:
           type: string
           format: email
         displayName:
@@ -151,12 +206,34 @@ components:
         phoneNumber:
           type: string
           format: string
-          pattern: '^[0-9]{10,15}$'
+          pattern: "^[0-9]{10,15}$"
           example: +621234567891
+
+    Edit User Response:
+      type: object
+      properties:
+        message:
+          type: string
+          format: string
+        data:
+          type: object
+          properties:
+            uid:
+              type: string
+              format: uuid
+            name:
+              type: string
+              format: string
+            email:
+              type: string
+              format: email
+            role:
+              type: string
+              enum: [user, partner, approver, admin]
 
     Reset Password:
       type: object
-      required: 
+      required:
         - email
       properties:
         email:

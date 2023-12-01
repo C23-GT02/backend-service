@@ -2,15 +2,18 @@ import {
   Body,
   Controller,
   FileTypeValidator,
+  Get,
   HttpException,
   HttpStatus,
-  MaxFileSizeValidator,
+  NotFoundException,
   ParseFilePipe,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
@@ -73,6 +76,27 @@ export class ApiController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
         message: 'Unexpected error during user registration',
       });
+    }
+  }
+
+  @Get('user')
+  async getUserData(@Query('email') email: string, @Res() res: Response) {
+    try {
+      const user = await admin.auth().getUserByEmail(email);
+      const { uid, displayName, phoneNumber, photoURL } = user;
+      const data = {
+        uid,
+        email,
+        displayName,
+        photoURL,
+        phoneNumber,
+      };
+      return res.status(200).json(data);
+    } catch (error) {
+      if (error.code === 'auth/user-not-found') {
+        throw new NotFoundException('User not found');
+      }
+      throw error; // Re-throw other errors
     }
   }
 
