@@ -16,6 +16,17 @@
   <link rel="stylesheet" href="/assets/css/product.css">
   <script src="https://cdn.tailwindcss.com"></script>
 
+    {{!-- Font Poppins --}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+    font-family: 'Poppins', sans-serif;
+}
+</style>
+
 </head>
 
 <body>
@@ -75,7 +86,7 @@
               </a>
             </li>
             <li class="nav-item my-1">
-              <a class="nav-link" href="#" aria-disabled="true">
+              <a class="nav-link" href="partner/profile" aria-disabled="true">
                 <span data-feather="bar-chart-2"></span>
                 Profiles
               </a>
@@ -84,51 +95,92 @@
         </div>
       </nav>
 
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 h-100 ">
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 h-100 mb-3">
         <div class="row pt-4 pr-5 pb-4">
-          <div class="col-2 d-flex align-items-center">
+          <div class="col-12 d-flex align-items-center">
+            <div class="title flex">
             <h3 class="text-black">Products Overview</h3>
-          </div>
-          <div class="col d-flex align-items-center ">
-            <a class="add-product" href="">
-              <h5>+ Create Product</h5>
-            </a>
+            </div>
+            <div class="action ms-auto">
+              <a href="" class="btn btn-success shadow rounded-pill py-2 px-3">+ Create Product</a>
+            </div>
           </div>
         </div>
-        <table class="table align-items-center justify-content-center">
-          <thead class="align-items-center justify-content-center">
-            <tr>
-              <th class="fs-5">Gambar</th>
-              <th class="fs-5">Nama Product</th>
-              <th class="fs-5">Tags</th>
-              <th class="fs-5">Stock</th>
-              <th class="fs-5">Harga</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody class="align-items-center justify-content-center">
-            <tr>
-              <td>
-                <img class="img-fluid mx-3" src="/assets/amati-logo.png" alt="" srcset="" width="80px">
-              </td>
-              <td class="fs-5">Tumbler Adinata</td>
-              <td class="fs-5">tumbler, wood, handcrafted</td>
-              <td class="fs-5">500 pcs</td>
-              <td class="fs-5">250.000</td>
-              <td>
-                <a href="" aria-details="details">
-                  <svg class="" width="40" height="10" viewBox="0 0 40 10" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="5" cy="5" r="5" fill="#179473" />
-                    <circle cx="20" cy="5" r="5" fill="#179473" />
-                    <circle cx="35" cy="5" r="5" fill="#179473" />
-                  </svg>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="row mt-3 pt-3 px-3">
+          <div class="col-md-3">
+            <div class="card border-0 shadow pb-2" style="width: 16rem;">
+              <img src="/assets/product-1.png" class="card-img-top" alt="product-1" width="auto" height="220px">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="title">
 
+                    <h5 class="card-title fw-bold">Jamu Kuat</h5>
+                  </div>
+                  <div class="ms-auto">
+                    <span class="badge bg-success">50</span>
+                  </div>
+                </div>
+                <div class="tags gap-2 pb-2 pt-1">
+                <span class="badge bg-danger">Kesehatan</span>
+                <span class="badge bg-primary">Minuman</span>
+                <span class="badge bg-success">Herbal</span>
+                </div>
+                <p class="card-text fw-bold text-success">Rp. 25.000</p>
+                <a href="#" class="btn btn-outline-success btn-sm rounded-pill py-2 px-3">Kelola Produk</a>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow pb-2" style="width: 16rem;">
+              <img src="/assets/product-1.png" class="card-img-top" alt="product-1" width="auto" height="220px">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="title">
+
+                    <h5 class="card-title fw-bold">Jamu Kuat</h5>
+                  </div>
+                  <div class="ms-auto">
+                    <span class="badge bg-success">50</span>
+                  </div>
+                </div>
+                <div class="tags gap-2 pb-2 pt-1">
+                <span class="badge bg-danger">Kesehatan</span>
+                <span class="badge bg-primary">Minuman</span>
+                <span class="badge bg-success">Herbal</span>
+                </div>
+                <p class="card-text fw-bold text-success">Rp. 25.000</p>
+                <a href="#" class="btn btn-outline-success btn-sm rounded-pill py-2 px-3">Kelola Produk</a>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card border-0 shadow pb-2" style="width: 16rem;">
+              <img src="/assets/product-1.png" class="card-img-top" alt="product-1" width="auto" height="220px">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div class="title">
+
+                    <h5 class="card-title fw-bold">Jamu Kuat</h5>
+                  </div>
+                  <div class="ms-auto">
+                    <span class="badge bg-success">50</span>
+                  </div>
+                </div>
+                <div class="tags gap-2 pb-2 pt-1">
+                <span class="badge bg-danger">Kesehatan</span>
+                <span class="badge bg-primary">Minuman</span>
+                <span class="badge bg-success">Herbal</span>
+                </div>
+                <p class="card-text fw-bold text-success">Rp. 25.000</p>
+                <a href="#" class="btn btn-outline-success btn-sm rounded-pill py-2 px-3">Kelola Produk</a>
+              </div>
+
+            </div>
+          </div>
+          
+        </div>
     </div>
 
 
