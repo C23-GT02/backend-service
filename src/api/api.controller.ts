@@ -13,7 +13,6 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
@@ -24,12 +23,14 @@ import { admin, cookieOptions } from 'src/main';
 import { LoginUserModel } from 'src/models/login.model';
 import { RegisterModelMobile } from 'src/models/register.model';
 import { editUserMobileModel } from 'src/models/user.mobile.model';
+import { FirestoreService } from 'src/services/firestore.service';
 
 @Controller('api')
 export class ApiController {
   constructor(
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
+    private readonly firestoreService: FirestoreService,
   ) {}
   // Begin Auth Controller Route
   @Post('auth/login')
@@ -62,6 +63,7 @@ export class ApiController {
     @Res() res: Response,
   ) {
     try {
+      console.log(data);
       const userData = await this.registerService.registerUserMobile(data);
       res.status(HttpStatus.CREATED).send({
         message: 'User created successfully',
@@ -78,6 +80,8 @@ export class ApiController {
       });
     }
   }
+
+  // Begin User Controller Route
 
   @Get('user')
   async getUserData(@Query('email') email: string, @Res() res: Response) {
@@ -100,7 +104,6 @@ export class ApiController {
     }
   }
 
-  // Begin User Controller Route
   @Post('user/edit')
   @UseInterceptors(FileInterceptor('image'))
   async editUserAuth(
@@ -161,5 +164,10 @@ export class ApiController {
     } catch (error) {
       return error;
     }
+  }
+
+  @Get('home')
+  async getHomepage() {
+    return this.firestoreService.getAllRefWithinProducts();
   }
 }

@@ -20,11 +20,7 @@ export class StorageService {
       await bucket.file(destinationPath).save(file, fileOptions);
 
       // Return the public URL of the uploaded file
-      const [url] = await bucket.file(destinationPath).getSignedUrl({
-        action: 'read',
-        expires: '03-09-2491', // Replace with an appropriate expiration date
-      });
-
+      const url = await bucket.file(destinationPath).publicUrl();
       return url;
     } catch (error) {
       console.error('Error storing file in Firebase Storage:', error);

@@ -6,6 +6,7 @@ export class FirestoreService {
   private readonly historyCollection: string = 'history';
   private readonly partnerCollection: string = 'verifiedPartner';
   private readonly userCollection: string = 'users';
+  private readonly productsCollection = 'products';
 
   async getHistoryUser(user: string) {
     return this.getHistoryProduct(user, this.userCollection);
@@ -52,6 +53,48 @@ export class FirestoreService {
       return userHistoryData;
     } catch (error) {
       return error;
+    }
+  }
+
+  async getAllRefWithinProducts(): Promise<{ product: any; partner: any }[]> {
+    try {
+      const querySnapshot = await admin
+        .firestore()
+        .collection(this.productsCollection)
+        .get();
+
+      const productsData: { product: any; partner: any }[] = [];
+
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        const { productRef, partnerRef } = data; // Adjust field names accordingly
+        const resolvedProductRef = await this.resolveReference(productRef);
+        const resolvedPartnerRef = await this.resolveReference(partnerRef);
+
+        productsData.push({
+          product: resolvedProductRef,
+          partner: resolvedPartnerRef,
+        });
+      }
+
+      return productsData;
+    } catch (error) {
+      throw new Error(`Failed to retrieve data: ${error.message}`);
+    }
+  }
+
+  private async resolveReference(reference: string): Promise<any> {
+    try {
+      const referenceDoc = await admin.firestore().doc(reference).get();
+
+      if (referenceDoc.exists) {
+        return referenceDoc.data();
+      } else {
+        throw new Error(`Referenced document not found for path: ${reference}`);
+      }
+    } catch (error) {
+      // Handle Firestore errors or log them if needed.
+      throw new Error(`Failed to resolve reference: ${error.message}`);
     }
   }
 }

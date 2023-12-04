@@ -51,7 +51,11 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    }),
+  );
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({

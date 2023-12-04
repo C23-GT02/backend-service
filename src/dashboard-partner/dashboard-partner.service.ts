@@ -29,13 +29,14 @@ export class DashboardPartnerService {
   async createProduct(partner: string, product: createProductModel) {
     return new Promise(async (resolve, reject) => {
       try {
-        admin
+        await admin
           .firestore()
           .collection(this.partnerCollection)
           .doc(partner)
           .collection(this.productCollection)
           .doc(product.name)
           .set(product);
+
         resolve('product berhasil dibuat');
       } catch (error) {
         reject(error);

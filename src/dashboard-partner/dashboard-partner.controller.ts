@@ -38,7 +38,7 @@ export class DashboardPartnerController {
   // @Render('partner-product')
   @Render('product')
   @Get()
-  async partnerProduct(@Req() req: Request, @Res() res: Response) {
+  async partnerProduct() {
     // const { businessName }: idCookie = req.signedCookies.id;
     // // if (businessName != null) {
     // //   res.redirect(`partner/${businessName}`);
@@ -48,7 +48,7 @@ export class DashboardPartnerController {
   }
 
   @Post()
-  @UseInterceptors(FilesInterceptor('images', 10)) // html name attribute and max image uploaded
+  @UseInterceptors(FilesInterceptor('images', 10))
   async registerUser(
     @UploadedFiles(
       new ParseFilePipe({
@@ -59,10 +59,11 @@ export class DashboardPartnerController {
     @Body() body: createProductModel,
     @Req() req: Request,
   ) {
-    body.harga = parseInt(body.harga); // convert string to number
-    body.stock = parseInt(body.stock);
+    const { harga, name, packaging, proses, deskripsi, material, tags, stock } =
+      body;
 
-    const { harga, name, packaging, proses, deskripsi, material, tags } = body;
+    body.harga = parseInt(harga); // convert string to number
+    body.stock = parseInt(stock);
 
     const qrPayload = {
       name,
@@ -73,32 +74,30 @@ export class DashboardPartnerController {
       proses,
       packaging,
     };
-
     const { businessName }: idCookie = req.signedCookies.id;
-    const path = `${businessName}/products/${body.name}`;
-    const qrPath = `${path}/${body.name}`;
-    const qrBatchPath = `${path}/${body.name}`;
+
+    const path = `${businessName}/products/${name}`;
+    const qrPath = `${path}/${name}`;
+    const partnerRef = `${this.partnerCollection}/${businessName}`;
+    const productRef = `${partnerRef}/products/${name}`;
 
     const data: any[] = [];
 
     for (let i = 0; i < body.stock; i++) {
       const id = nanoid(10);
-      data.push({
-        id,
-        name: body.name,
-      });
+      data.push({ id, name, partnerRef, productRef });
+
       await admin
         .firestore()
         .collection(this.partnerCollection)
         .doc(businessName)
         .collection(this.productsCollection)
-        .doc(body.name)
+        .doc(name)
         .collection('product-id')
         .doc(id)
         .set(data[i]);
     }
 
-    // return imageURL to be stored in array
     const imageUrls = await Promise.all(
       images.map(async (image) => {
         return await this.registerService.storeImage(path, image);
@@ -107,18 +106,23 @@ export class DashboardPartnerController {
 
     body.images = imageUrls;
 
-    // make the tags to be array type
-    body.tags = await body.tags.split(',').map((val) => val);
+    body.tags = body.tags.split(',').map((val) => val); // make the tags an array
 
     const qr = await this.qrCodeService.generateQrCode(
       JSON.stringify(qrPayload),
     );
     body.qrcodeURL = await this.storageService.storeFile(qr, qrPath);
 
-    // Generate batch QR codes
-    await this.qrCodeService.generateBatchQrCode(body.stock, data, qrBatchPath);
+    await this.qrCodeService.generateBatchQrCode(body.stock, data, qrPath);
 
     const create = await this.partnerService.createProduct(businessName, body);
+
+    await admin
+      .firestore()
+      .collection(this.productsCollection)
+      .doc(name)
+      .set({ productRef, partnerRef });
+
     return create;
   }
 

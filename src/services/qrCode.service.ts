@@ -8,7 +8,8 @@ import { StorageContentType } from 'src/models/content-type.model';
 export class QrCodeService {
   constructor(private readonly storageService: StorageService) {}
   private readonly qrUrl = 'https://qrcode3.p.rapidapi.com/qrcode/text';
-  private readonly rapidAPIKey = 'f9861f8359mshcd8355461edaa4cp1be209jsn5f29b0f47d11';
+  private readonly rapidAPIKey =
+    'f9861f8359mshcd8355461edaa4cp1be209jsn5f29b0f47d11';
   private readonly rapidHost = 'qrcode3.p.rapidapi.com';
 
   async generateQrCode(data: any, output: string = 'qrcode') {
@@ -47,6 +48,7 @@ export class QrCodeService {
 
     try {
       const response = await axios.request(options);
+      console.log();
       return response.data;
     } catch (error) {
       throw error;
@@ -54,14 +56,11 @@ export class QrCodeService {
   }
 
   async generateBatchQrCode(qty: number, data: any[], location: string) {
-    console.log(data);
     for (let index = 0; index < qty; index++) {
-      console.log(index);
       const qr = await this.generateQrCode(
         JSON.stringify(data[index]),
         `${data[index].id}-${index}`,
       );
-      console.log(qr);
       await this.storageService.storeFile(
         qr,
         `${location}/${data[index].id}`,

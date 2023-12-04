@@ -12,6 +12,7 @@ import { DashboardPartnerService } from './dashboard-partner/dashboard-partner.s
 import { QrCodeService } from './services/qrCode.service';
 import { StorageService } from './services/storage.service';
 import { ApiController } from './api/api.controller';
+import { FirestoreService } from './services/firestore.service';
 
 @Module({
   imports: [],
@@ -32,6 +33,7 @@ import { ApiController } from './api/api.controller';
     DashboardPartnerService,
     QrCodeService,
     StorageService,
+    FirestoreService,
   ],
 })
 export class AppModule {}
