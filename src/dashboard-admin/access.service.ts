@@ -9,7 +9,6 @@ export class AdminAccessService {
   // add roles to existing users
   async createUserRole(data: ApproverDTO) {
     const { username, email, role } = data;
-    console.log(data);
     const userData = await admin.auth().getUserByEmail(email);
 
     const payload = {

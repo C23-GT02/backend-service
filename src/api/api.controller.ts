@@ -207,6 +207,24 @@ export class ApiController {
     }
   }
 
+  @Get('product')
+  async getAllProductPartner(@Query('partner') partnerName: string) {
+    try {
+      const collectionRef = admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(partnerName)
+        .collection(this.productCollection);
+      const snapshot = await collectionRef.get();
+      const data = snapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+      return data;
+    } catch (error) {
+      return error;
+    }
+  }
+
   @Get('product/:name')
   async getProduct(@Param('name') productName: string) {
     try {
