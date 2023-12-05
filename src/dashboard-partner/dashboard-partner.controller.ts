@@ -7,7 +7,6 @@ import {
   Post,
   Render,
   Req,
-  Res,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -15,7 +14,7 @@ import { DashboardPartnerService } from './dashboard-partner.service';
 import { createProductModel } from '../models/product.model';
 import { RegisterService } from 'src/auth/register.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { idCookie } from 'src/auth/cookies.model';
 import { QrCodeService } from '../services/qrCode.service';
 import { StorageService } from 'src/services/storage.service';

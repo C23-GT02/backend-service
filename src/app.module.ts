@@ -13,6 +13,7 @@ import { QrCodeService } from './services/qrCode.service';
 import { StorageService } from './services/storage.service';
 import { ApiController } from './api/api.controller';
 import { FirestoreService } from './services/firestore.service';
+import { ApiService } from './api/api.service';
 
 @Module({
   imports: [],
@@ -34,6 +35,7 @@ import { FirestoreService } from './services/firestore.service';
     QrCodeService,
     StorageService,
     FirestoreService,
+    ApiService,
   ],
 })
 export class AppModule {}

@@ -56,24 +56,22 @@ export class FirestoreService {
     }
   }
 
-  async getAllRefWithinProducts(): Promise<{ product: any; partner: any }[]> {
+  async getAllRefWithinProducts(): Promise<{ product: any }[]> {
     try {
       const querySnapshot = await admin
         .firestore()
         .collection(this.productsCollection)
         .get();
 
-      const productsData: { product: any; partner: any }[] = [];
+      const productsData: { product: any }[] = [];
 
       for (const doc of querySnapshot.docs) {
         const data = doc.data();
-        const { productRef, partnerRef } = data; // Adjust field names accordingly
+        const { productRef } = data; // Adjust field names accordingly
         const resolvedProductRef = await this.resolveReference(productRef);
-        const resolvedPartnerRef = await this.resolveReference(partnerRef);
 
         productsData.push({
           product: resolvedProductRef,
-          partner: resolvedPartnerRef,
         });
       }
 
@@ -83,10 +81,9 @@ export class FirestoreService {
     }
   }
 
-  private async resolveReference(reference: string): Promise<any> {
+  async resolveReference(reference: string): Promise<any> {
     try {
       const referenceDoc = await admin.firestore().doc(reference).get();
-
       if (referenceDoc.exists) {
         return referenceDoc.data();
       } else {
