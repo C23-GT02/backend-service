@@ -52,6 +52,21 @@ async function bootstrap() {
     }),
   );
   app.use(helmet());
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+          'code.jquery.com',
+          'cdn.datatables.net',
+        ],
+        // Tambahkan domain lain yang Anda perlukan ke dalam directive ini
+      },
+    }),
+  );
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({

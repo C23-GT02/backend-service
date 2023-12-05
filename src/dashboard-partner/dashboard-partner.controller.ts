@@ -47,6 +47,10 @@ export class DashboardPartnerController {
     // // }
   }
 
+  @Get('products')
+  @Render('partner-product')
+  async getPartnerProducts() {}
+
   @Post()
   @UseInterceptors(FilesInterceptor('images', 10)) // html name attribute and max image uploaded
   async registerUser(
@@ -121,6 +125,10 @@ export class DashboardPartnerController {
     const create = await this.partnerService.createProduct(businessName, body);
     return create;
   }
+
+  @Get('products/jamu')
+  @Render('product-list')
+  async getProductList() {}
 
   @Get('profile')
   @Render('partner-profile')
