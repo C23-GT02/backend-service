@@ -7,7 +7,6 @@ import {
 } from 'class-validator';
 
 export class RegisterModelMobile {
-  @IsString()
   @IsEmail()
   email: string;
 

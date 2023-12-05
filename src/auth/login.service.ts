@@ -94,7 +94,6 @@ export class LoginService {
       const sessionCookie: string = await admin
         .auth()
         .createSessionCookie(data.idToken, { expiresIn: duration });
-
       // You can customize the response based on the controller
       return { data, sessionCookie };
     } catch (error) {
