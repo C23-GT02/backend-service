@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="Bananalem0n">
@@ -14,13 +15,17 @@
   <!-- Custom styles for this template -->
   <link href="/assets/css/dashboard.css" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/product.css">
-  <script src="https://cdn.tailwindcss.com"></script>
 
     {{!-- Font Poppins --}}
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+{{!-- 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css"> --}}
 
+
+  
   <style>
     * {
     font-family: 'Poppins', sans-serif;
@@ -97,25 +102,43 @@
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 h-100 mb-3">
         <div class="row pt-4 pr-5 pb-4 mx-2">
-          <div class="col-12 d-flex align-items-center">
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/partner" class="text-decoration-none text-dark">Partner</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Product</li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="/partner/products" class="text-decoration-none text-dark">Product</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Jamu</li>
             </ol>
             </h4>
             </nav>
-            <div class="action ms-auto">
-              <a href="" class="btn btn-success shadow rounded-pill py-2 px-3">+ Create Product</a>
-            </div>
-          </div>
         </div>
         <div class="row mt-3 pt-3 px-3">
-          <div class="col-md-3">
-            <div class="card border-0 shadow pb-2" style="width: 16rem;">
-              <img src="/assets/product-1.png" class="card-img-top" alt="product-1" width="auto" height="220px">
+        <div class="col-md-8">
+            <table id="myTable" class="table table-striped nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Row 1 Data 1</td>
+                        <td>Row 1 Data 2</td>
+                    </tr>
+                    <tr>
+                        <td>Row 2 Data 1</td>
+                        <td>Row 2 Data 2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+         <div class="col-md-4">
+            <div class="card border-0 shadow pb-2" style="width: 20rem;">
               <div class="card-body">
+                <div class="mb-3 image d-flex flex-column justify-content-center align-items-center">
+                <img src="/assets/product-1.png" class="rounded" alt="product-1" height="200px" width="200px">
+                </div>
                 <div class="d-flex">
                   <div class="title">
 
@@ -135,55 +158,7 @@
               </div>
 
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow pb-2" style="width: 16rem;">
-              <img src="/assets/product-1.png" class="card-img-top" alt="product-1" width="auto" height="220px">
-              <div class="card-body">
-                <div class="d-flex">
-                  <div class="title">
-
-                    <h5 class="card-title fw-bold">Jamu Kuat</h5>
-                  </div>
-                  <div class="ms-auto">
-                    <span class="badge bg-success">50</span>
-                  </div>
-                </div>
-                <div class="tags gap-2 pb-2 pt-1">
-                <span class="badge bg-danger">Kesehatan</span>
-                <span class="badge bg-primary">Minuman</span>
-                <span class="badge bg-success">Herbal</span>
-                </div>
-                <p class="card-text fw-bold text-success">Rp. 25.000</p>
-                <a href="#" class="btn btn-outline-success btn-sm rounded-pill py-2 px-3">Kelola Produk</a>
-              </div>
-
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card border-0 shadow pb-2" style="width: 16rem;">
-              <img src="/assets/product-1.png" class="card-img-top" alt="product-1" width="auto" height="220px">
-              <div class="card-body">
-                <div class="d-flex">
-                  <div class="title">
-
-                    <h5 class="card-title fw-bold">Jamu Kuat</h5>
-                  </div>
-                  <div class="ms-auto">
-                    <span class="badge bg-success">50</span>
-                  </div>
-                </div>
-                <div class="tags gap-2 pb-2 pt-1">
-                <span class="badge bg-danger">Kesehatan</span>
-                <span class="badge bg-primary">Minuman</span>
-                <span class="badge bg-success">Herbal</span>
-                </div>
-                <p class="card-text fw-bold text-success">Rp. 25.000</p>
-                <a href="#" class="btn btn-outline-success btn-sm rounded-pill py-2 px-3">Kelola Produk</a>
-              </div>
-
-            </div>
-          </div>
+         </div>
           
         </div>
     </div>
@@ -197,13 +172,18 @@
 
 
   <script src="/assets/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
-    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
-    crossorigin="anonymous"></script>
-  <script src="/assets/js/dashboard.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+  <script type="module" src="/assets/js/dashboard.js"></script>
+  <script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+  </script>
+
 </body>
 
 </html>

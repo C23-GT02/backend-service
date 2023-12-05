@@ -46,6 +46,10 @@ export class DashboardPartnerController {
     // // }
   }
 
+  @Get('products')
+  @Render('partner-product')
+  async getPartnerProducts() {}
+
   @Post()
   @UseInterceptors(FilesInterceptor('images', 10))
   async registerUser(
@@ -124,6 +128,10 @@ export class DashboardPartnerController {
 
     return create;
   }
+
+  @Get('products/jamu')
+  @Render('product-list')
+  async getProductList() {}
 
   @Get('profile')
   @Render('partner-profile')
