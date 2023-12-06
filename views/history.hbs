@@ -1,101 +1,189 @@
 <html lang='en'>
-  <head>
-    <meta charset='UTF-8' />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>History</title>
-    <link rel='stylesheet' href='/assets/css/bootstrap.min.css' />
-    <link rel='stylesheet' href='/assets/css/history.css' />
-  </head>
-  <body>
-    <div class='wrapper rounded'>
-      <nav class='navbar navbar-expand-lg d-lg-flex align-items-lg-start'>
-        <a class='navbar-brand' href='#'>History
-          <p class='text-muted pl-1'>Welcome to History</p>
-        </a>
-      </nav>
-      <div class='d-flex justify-content-between align-items-center mt-3'>
-        <button class='btn mr-2' type='button' id='exportButton'>Export</button>
-        <div class='input-group form-control-sm'>
-          <input type='text' class='form-control' placeholder='Search' />
+
+<head>
+  <meta charset='UTF-8' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <title>History</title>
+  <link rel='stylesheet' href='/assets/css/bootstrap.min.css' />
+  <link rel='stylesheet' href='/assets/css/history.css' />
+  <link href="/assets/css/dashboard.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <header class="navbar navbar-dark sticky-top amati-green flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-4 py-3" href="#">AMATI Indonesia</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {{!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> --}}
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="sign-out px-3 py-3" href="#" data-bs-toggle="modal" data-bs-target="#signOutModal">Sign Out</a>
+      </div>
+    </div>
+    <!-- Sign Out Confirmation Modal -->
+  </header>
+
+  <div class="modal fade" id="signOutModal" tabindex="-1" aria-labelledby="signOutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="button">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signOutModalLabel">Confirm Sign Out</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-      </div>
-      <div class='table-responsive mt-3'>
-        <table class='table table-borderless'>
-          <thead>
-            <tr>
-              <th scope='col'>Activity</th>
-              <th scope='col'>User Scanned</th>
-              <th scope='col'>Date</th>
-              <th scope='col'>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td scope='row'><img src='product.jpg' alt='' /> Jamu 1</td>
-              <td><p>example1@gmail.com</p></td>
-              <td>12 Jul 2020, 12:30 PM</td>
-              <td class='align-items-center'>Rp. 50.000</td>
-            </tr>
-            <tr>
-              <td scope='row'><img src='product.jpg' alt='' /> Jamu 2</td>
-              <td><p>example2@gmail.com</p></td>
-              <td>11 Jul 2020, 2:00 PM</td>
-              <td class='align-items-center'>Rp. 75.000</td>
-            </tr>
-            <tr>
-              <td scope='row'><img src='product.jpg' alt='' /> Jamu 3</td>
-              <td><p>example3@gmail.com</p></td>
-              <td>10 Jul 2020, 8:30 PM</td>
-              <td class='align-items-center'>Rp. 30.000</td>
-            </tr>
-            <tr>
-              <td scope='row'><img src='product.jpg' alt='' /> Jamu 4</td>
-              <td><p>example4@gmail.com</p></td>
-              <td>12 May 2020, 4:30 PM</td>
-              <td class='align-items-center'>Rp. 40.000</td>
-            </tr>
-            <tr>
-              <td scope='row'><img src='product.jpg' alt='' />Jamu 5</td>
-              <td><p>example5@gmail.com</p></td>
-              <td>11 May 2020, 5:30 PM</td>
-              <td class='align-items-center'>Rp. 60.000</td>
-            </tr>
-            <tr>
-              <td scope='row'><img src='product.jpg' alt='' /> Jamu 6</td>
-              <td><p>example4@gmail.com</p></td>
-              <td>10 May 2020, 01:30 PM</td>
-              <td class='align-items-center'>Rp. 100.000</td>
-            </tr>
-            <tr>
-              <td scope='row'><img src='product.jpg' alt='' /> Jamu 7</td>
-              <td><p>example4@gmail.com</p></td>
-              <td>09 May 2020, 01:30 PM</td>
-              <td class='align-items-center'>Rp. 25.000</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class='d-flex justify-content-between align-items-center results'>
-        <span class='pl-md-3'>Showing<b> 1-7 0f 200 </b> trasactions</span>
-        <div class='pt-3'>
-          <nav aria-label='Page navigation example'>
-            <ul class='pagination'>
-              <li class='page-item disabled'>
-                <a class='page-link' href='#' aria-label='Previous'>
-                  <span aria-hidden='true'>&lt;</span>
-                </a>
-              </li>
-              <li class='page-item'>
-                <a class='page-link' href='#' aria-label='Next'>
-                  <span aria-hidden='true'>&gt;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+        <div class="modal-body">
+          Are you sure you want to sign out?
+        </div>
+        <div class="modal-footer">
+          <a href="http://localhost:3000/signout" class="btn btn-primary">Sign Out</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
-    <script src='/assets/js/bootstrap.bundle.min.js'></script>
-  </body>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/admin/partner">
+                <span data-feather="users"></span>
+                Business Partners
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/admin/approval">
+                <span data-feather="file"></span>
+                Pending Partner Requests
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link active" href="#" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                Access Control
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class='wrapper rounded'>
+          <nav class='navbar navbar-expand-lg d-lg-flex align-items-lg-start'>
+            <a class='navbar-brand' href='#'>History
+              <p class='text-muted pl-1'>Welcome to History</p>
+            </a>
+          </nav>
+          <div class='d-flex justify-content-between align-items-center mt-3'>
+            <button class='btn mr-2' type='button' id='exportButton'>Export</button>
+            <div class='input-group form-control-sm'>
+              <input type='text' class='form-control' placeholder='Search' />
+            </div>
+          </div>
+          <div class='table-responsive mt-3'>
+            <table class='table table-borderless'>
+              <thead>
+                <tr>
+                  <th scope='col'>Activity</th>
+                  <th scope='col'>User Scanned</th>
+                  <th scope='col'>Date</th>
+                  <th scope='col'>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope='row'><img src='product.jpg' alt='' /> Jamu 1</td>
+                  <td>
+                    <p>example1@gmail.com</p>
+                  </td>
+                  <td>12 Jul 2020, 12:30 PM</td>
+                  <td class='align-items-center'>Rp. 50.000</td>
+                </tr>
+                <tr>
+                  <td scope='row'><img src='product.jpg' alt='' /> Jamu 2</td>
+                  <td>
+                    <p>example2@gmail.com</p>
+                  </td>
+                  <td>11 Jul 2020, 2:00 PM</td>
+                  <td class='align-items-center'>Rp. 75.000</td>
+                </tr>
+                <tr>
+                  <td scope='row'><img src='product.jpg' alt='' /> Jamu 3</td>
+                  <td>
+                    <p>example3@gmail.com</p>
+                  </td>
+                  <td>10 Jul 2020, 8:30 PM</td>
+                  <td class='align-items-center'>Rp. 30.000</td>
+                </tr>
+                <tr>
+                  <td scope='row'><img src='product.jpg' alt='' /> Jamu 4</td>
+                  <td>
+                    <p>example4@gmail.com</p>
+                  </td>
+                  <td>12 May 2020, 4:30 PM</td>
+                  <td class='align-items-center'>Rp. 40.000</td>
+                </tr>
+                <tr>
+                  <td scope='row'><img src='product.jpg' alt='' />Jamu 5</td>
+                  <td>
+                    <p>example5@gmail.com</p>
+                  </td>
+                  <td>11 May 2020, 5:30 PM</td>
+                  <td class='align-items-center'>Rp. 60.000</td>
+                </tr>
+                <tr>
+                  <td scope='row'><img src='product.jpg' alt='' /> Jamu 6</td>
+                  <td>
+                    <p>example4@gmail.com</p>
+                  </td>
+                  <td>10 May 2020, 01:30 PM</td>
+                  <td class='align-items-center'>Rp. 100.000</td>
+                </tr>
+                <tr>
+                  <td scope='row'><img src='product.jpg' alt='' /> Jamu 7</td>
+                  <td>
+                    <p>example4@gmail.com</p>
+                  </td>
+                  <td>09 May 2020, 01:30 PM</td>
+                  <td class='align-items-center'>Rp. 25.000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class='d-flex justify-content-between align-items-center results'>
+            <span class='pl-md-3'>Showing<b> 1-7 0f 200 </b> trasactions</span>
+            <div class='pt-3'>
+              <nav aria-label='Page navigation example'>
+                <ul class='pagination'>
+                  <li class='page-item disabled'>
+                    <a class='page-link' href='#' aria-label='Previous'>
+                      <span aria-hidden='true'>&lt;</span>
+                    </a>
+                  </li>
+                  <li class='page-item'>
+                    <a class='page-link' href='#' aria-label='Next'>
+                      <span aria-hidden='true'>&gt;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </main>
+      <script src='/assets/js/bootstrap.bundle.min.js'></script>
+      <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+        crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+        crossorigin="anonymous"></script>
+      <script src="/assets/js/dashboard.js"></script>
+</body>
+
 </html>

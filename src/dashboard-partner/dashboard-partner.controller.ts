@@ -20,6 +20,7 @@ import { QrCodeService } from '../services/qrCode.service';
 import { StorageService } from 'src/services/storage.service';
 import { admin } from 'src/main';
 import { nanoid } from 'nanoid';
+import { MemberModel } from 'src/models/founder.model';
 
 @Controller('partner')
 export class DashboardPartnerController {
@@ -30,8 +31,10 @@ export class DashboardPartnerController {
     private readonly storageService: StorageService,
   ) {}
 
-  private partnerCollection: string = 'verifiedPartner';
-  private productsCollection: string = 'products';
+  private readonly partnerCollection: string = 'verifiedPartner';
+  private readonly productsCollection: string = 'products';
+  private readonly historyCollection: string = 'history';
+  private readonly employeeCollection: string = 'employee';
   // @UseGuards(CookieAuthGuard, RolesGuard)
   // @Roles(Role.Partner)
   // @Render('partner-product')
@@ -136,6 +139,36 @@ export class DashboardPartnerController {
   @Get('profile')
   @Render('partner-profile')
   async partnerProfile() {}
+
+  @Post('profile/employee')
+  async addEmployee(@Req() req: Request, @Body() employee: MemberModel) {
+    const { businessName }: idCookie = req.signedCookies.id;
+    console.log(employee);
+    const { name } = employee;
+    const ref = `${this.partnerCollection}/${businessName}/${this.employeeCollection}/${name}`;
+    return this.partnerService.setOrUpdateDocument(ref, employee);
+  }
+
+  @Get('history')
+  @Render('history-revisi')
+  async getHistory(@Req() req: Request) {
+    const { businessName }: idCookie = req.signedCookies.id;
+    try {
+      const collectionRef = admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(businessName)
+        .collection(this.historyCollection);
+      const snapshot = await collectionRef.get();
+      const data = snapshot.docs.map((doc) => {
+        return { ...doc.data() }; // Include document ID in the result
+      });
+      console.log(data);
+      return { history: data };
+    } catch (error) {
+      return error;
+    }
+  }
 
   @Get('/edit')
   @Render('partner-edit')

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { admin } from 'src/main';
 import { createProductModel } from '../models/product.model';
+import { MemberModel } from 'src/models/founder.model';
 
 @Injectable()
 export class DashboardPartnerService {
@@ -42,5 +43,24 @@ export class DashboardPartnerService {
         reject(error);
       }
     });
+  }
+
+  async setOrUpdateDocument(ref: string, body: MemberModel) {
+    try {
+      const { name, role, bio, link } = body;
+      const dataref = admin.firestore().doc(ref);
+      const getData = await dataref.get();
+      if (getData.exists) {
+        return dataref.update({
+          name,
+          role,
+          bio,
+          link,
+        });
+      }
+      return dataref.set(body);
+    } catch (error) {
+      return error;
+    }
   }
 }
