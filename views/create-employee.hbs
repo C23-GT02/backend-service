@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Bananalem0n">
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/icons/bootstrap-icon/bootstrap-icons.css" rel="stylesheet">
+  <title>Partner | Profile</title>
+
+
+  <!-- Custom styles for this template -->
+  <link href="/assets/css/dashboard.css" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/product.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  {{!-- Font Poppins --}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+
+</head>
+
+
+<body>
+
+  <header class="navbar navbar-dark sticky-top amati-green flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-4 py-3" href="#">AMATI Indonesia</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {{!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> --}}
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="sign-out px-3 py-3" href="#">Sign Out</a>
+      </div>
+    </div>
+    <!-- Sign Out Confirmation Modal -->
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/partner">
+                Home
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link" href="#">
+                Products
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link" href="/partner/history" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                History
+              </a>
+            </li>
+            <li class="nav-item my-1">
+              <a class="nav-link active" href="/partner/profile" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                Profiles
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 h-100 ">
+        <div class="row pt-4 pr-5 pb-3">
+          <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <h4>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/partner" class="text-decoration-none text-dark">Partner</a></li>
+                <li class="breadcrumb-item"><a href="/partner/profile"
+                    class="text-decoration-none text-dark">Profile</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+              </ol>
+            </h4>
+          </nav>
+        </div>
+        <div class="d-flex mx-3 gap-4 justify-content-center align-items-center">
+          <div class="col-md-7">
+            <div class="card border-0 shadow mb-3 mt-3" style="width: auto;">
+              <div class="card-header pb-0 border-0">
+                <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2 fw-bold">Edit Profile</p>
+                <hr class="my-0 py-0">
+              </div>
+              <div class="card-body">
+                <div class="d-row d-flex justify-content-center align-items-center flex-column pt-3 pb-3">
+                  <form action="" method="post" id="create-employee" enctype="multipart/form-data">
+                    <div class="form-floating mb-2">
+                      <input type="text" required class="form-control" name="name" id="floatingInput" placeholder="">
+                      <label for="floatingInput">Nama</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input type="text" required class="form-control" name="role" id="floatingInput" placeholder="">
+                      <label for="floatingInput">Jabatan</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input type="text" required class="form-control" name="link" id="floatingInput" placeholder="">
+                      <label for="floatingInput">Profile Link</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <textarea class="form-control" placeholder="" id="floatingInput" name="bio" required></textarea>
+                      <label for="floatingInput">Bio</label>
+                    </div>
+                    <div class="mb-3">
+                      <label for="formFile" class="form-label float-start">Profile Photo</label>
+                      <input name="image" class="form-control" type="file" id="image" accept="image/*" required>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                      <button class="btn amati-green text-white shadow mx-2" type="submit">Create</button>
+                      <button class=" btn btn-outline-danger text-white shadow mx-2" type="button"><a
+                          class="text-black text-decoration-none" href="/partner/profile">Cancel</a></button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+    </div>
+
+
+
+    </main>
+  </div>
+
+  <script src="/assets/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+    crossorigin="anonymous"></script>
+  <script src="/assets/js/dashboard.js"></script>
+</body>
+
+</html>

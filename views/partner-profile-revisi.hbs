@@ -18,14 +18,14 @@
 
   {{!-- Font Poppins --}}
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 
-<style>
+  <style>
     * {
-    font-family: 'Poppins', sans-serif;
-}
-</style>
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
 
 </head>
 
@@ -100,135 +100,279 @@
         <div class="row pt-4 pr-5 pb-3">
           <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <h4>
-            <ol class="breadcrumb">
+              <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/partner" class="text-decoration-none text-dark">Partner</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Profile</li>
-            </ol>
+              </ol>
             </h4>
-            </nav>
+          </nav>
         </div>
         <div class="d-row d-flex mx-3 gap-4">
-            <div class="col-md-4">
-                <div class="card border-0 shadow" style="width: auto;">
-                    <div class="card-header pb-0 border-0">
-                        <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">Display Profile</p>
-                        <hr class="my-0 py-0">
-                    </div>
-                    <div class="card-body">
-                        <div class="d-row d-flex justify-content-center align-items-center flex-column">
-                            <img src="/assets/homaherbs.png" alt="" height="90px" width="auto">
-                            <p class="fw-bold mb-0 fs-4">HomaHerbs</p>
-                            <p>@homaherbs_</p>
-                        </div>
-                    </div>
+          <div class="col-md-4">
+            <div class="card border-0 shadow" style="width: auto;">
+              <div class="card-header pb-0 border-0">
+                <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">Display Profile</p>
+                <hr class="my-0 py-0">
+              </div>
+              <div class="card-body">
+                <div class="d-row d-flex justify-content-center align-items-center flex-column">
+                  <img src="data:image/png;base64,{{partner.logo}}" alt="" height="90px" width="auto">
+                  <p class="fw-bold mb-0 fs-4">{{partner.businessName}}</p>
+                  <p class="uid">{{partner.uuid}}</p>
                 </div>
-                <div class="card border-0 shadow mt-3 py-2" style="width: auto;">
-                    <div class="card-body">
-                        <div class="d-row d-flex justify-content-center align-items-center gap-4">
-                            <div class="card border-0 shadow px-4 py-2 flex-column text-center"><h2><i class="bi bi-box-seam-fill text-success"></i></h2><h4 class="m-0 text-success">0</h4><h6 class="m-0">Product</h6></div>
-                             <div class="card border-0 shadow px-4 py-2 flex-column text-center"><h2><i class="bi bi-people-fill text-success"></i></h2><h4 class="m-0 text-success">0</h4><h6 class="m-0">Costumer</h6></div>
-                        </div>
-                        <div class="d-row d-flex justify-content-center align-items-center gap-4 pt-2">
-                             <div class="card border-0 shadow px-4 py-2 flex-column text-center"><h2><i class="bi bi-truck text-success"></i></h2><h4 class="m-0 text-success">0</h4><h6 class="m-0">Supplier</h6></div>
-                             <div class="card border-0 shadow px-4 py-2 flex-column text-center"><h2><i class="bi bi-person-vcard-fill text-success"></i></h2><h4 class="m-0 text-success">0</h4><h6 class="m-0">Employee</h6></div>
-                        </div>
-                   </div>
-                </div>
-                <div class="card border-0 shadow mt-3 py-2 mb-3" style="width: auto;">
-                    <div class="card-body">
-                        <div class="d-row d-flex justify-content-center align-items-center gap-4 flex-column">
-                            <div class="card border-0 shadow px-4 py-2 text-center">
-                              <h6>First Verified: 29 November 2023</h6>
-                            </div>
-                             <div class="card border-0 shadow px-4 py-2 text-center">
-                              <h6>
-                                Last Updated: 02 Desember 2023
-                              </h6>
-                             </div>
-                        </div>
-                   </div>
-                </div>
+              </div>
             </div>
-            <div class="col-md-8">
-                <div class="card border-0 shadow" style="width: auto;">
-                    <div class="card-header pb-0 border-0 pb-0 mb-0 d-flex flex-row">
-                      <div class="title">
-                        <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">General Information</p>
-                      </div>
-                        <div class="edit-btn ms-auto">
-                        <a href="/partner/edit"><span class="badge bg-warning ms-3 mt-2 py-2 shadow">Edit Information</span></a>
-                        </div>
-                    </div>
-                        <hr class="my-0 py-0">
-                    <div class="card-body">
-                        <div class="d-row d-flex justify-content-center align-items-center flex-row gap-2">
-                           <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon3" class="text-dark">Email</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="homaherbs@gmail.com" readonly>
-                          </div>
-                           <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon3" class="text-dark">Telephone</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="0822131412" readonly>
-                          </div>
-                        </div>
-                        <div class="d-row d-flex justify-content-center align-items-center flex-row gap-2">
-                           <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon3" class="text-dark">Nomor Izin</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="22183190123" readonly>
-                          </div>
-                           <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon3" class="text-dark">URL Olshop</span>
-                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="https://tokopedia.com/homaherbs" readonly>
-                          </div>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow mt-3 py-2" style="width: auto;">
+              <div class="card-body">
+                <div class="d-row d-flex justify-content-center align-items-center gap-4">
+                  <div class="card border-0 shadow px-4 py-2 flex-column text-center">
+                    <h2><i class="bi bi-box-seam-fill text-success"></i></h2>
+                    <h4 class="m-0 text-success">{{#if counter.product}}{{counter.product}}{{else}}0{{/if}}</h4>
+                    <h6 class="m-0">Product</h6>
+                  </div>
+                  <div class="card border-0 shadow px-4 py-2 flex-column text-center">
+                    <h2><i class="bi bi-people-fill text-success"></i></h2>
+                    <h4 class="m-0 text-success">{{#if counter.customer}}{{counter.customer}}{{else}}0{{/if}}</h4>
+                    <h6 class="m-0">Customer</h6>
+                  </div>
                 </div>
-                <div class="card border-0 shadow mt-3" style="width: auto;">
-                    <div class="card-header pb-0 border-0 pb-0 mb-0 d-flex flex-row">
-                      <div class="title">
-                        <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">Deskripsi Bisnis</p>
-                      </div>
-                    </div>
-                        <hr class="my-0 py-0">
-                    <div class="card-body">
-                        <div class="d-row d-flex justify-content-center align-items-center flex-row gap-2">
-                          <div class="description">
-                            <p class="ps-3 text-justify">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod fugit dolores natus asperiores voluptatem ut explicabo nisi reprehenderit accusamus, voluptas id ex nam iste enim porro, corporis atque alias incidunt praesentium beatae fuga? Nobis voluptates temporibus ipsa recusandae veniam minima praesentium sapiente distinctio saepe reprehenderit vero nulla sint natus, omnis earum, neque labore cupiditate minus cumque. Facere itaque reiciendis, ipsam incidunt illo impedit tempore. Labore qui exercitationem perferendis, ipsam veniam dolore ratione hic amet quis numquam consequuntur aut pariatur autem.
-                            </p>
-                           </div>
-            
-                        </div>
-                    </div>
+                <div class="d-row d-flex justify-content-center align-items-center gap-4 pt-2">
+                  <div class="card border-0 shadow px-4 py-2 flex-column text-center">
+                    <h2><i class="bi bi-truck text-success"></i></h2>
+                    <h4 class="m-0 text-success">{{#if counter.supplier}}{{counter.supplier}}{{else}}0{{/if}}</h4>
+                    <h6 class="m-0">Supplier</h6>
+                  </div>
+                  <div class="card border-0 shadow px-4 py-2 flex-column text-center">
+                    <h2><i class="bi bi-person-vcard-fill text-success"></i></h2>
+                    <h4 class="m-0 text-success">{{#if counter.employee}}{{counter.employee}}{{else}}0{{/if}}</h4>
+                    <h6 class="m-0">Employee</h6>
+                  </div>
                 </div>
-                <div class="card border-0 shadow mt-3 mb-2" style="width: auto;">
-                    <div class="card-header pb-0 border-0 pb-0 mb-0 d-flex flex-row">
-                      <div class="title">
-                        <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">Informasi Founder</p>
-                      </div>
-                      <div class="ms-auto">
-                        <a href="/partner/edit"><span class="badge bg-warning ms-3 mt-2 py-2 shadow">Edit Information</span></a>
-                      </div>
-                    </div>
-                        <hr class="my-0 py-0">
-                    <div class="card-body">
-                        <div class="d-row d-flex ps-3">
-                          <div class="description">
-                            <img src="/assets/ceo-homaherbs.png" class="rounded shadow-lg" alt="" height="130px" width="120px">
-                           </div>
-                          <div class="information ms-3 d-flex flex-column justify-content-center">
-                            <h6 class="fw-bold">Afifah Azzahra</h6>
-                            <h6>Founder/CEO Homaherbs</h6>
-                            <p><span class="badge bg-success">Enterpreneur</span><span class="badge bg-warning ms-1">pharmacy</span></p>
-                            <a href="/partner/edit"><span class="badge bg-primary py-2 shadow">Lihat detail</span></a>
-                          </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+            <div class="card border-0 shadow mt-3 py-2 mb-3" style="width: auto;">
+              <div class="card-body">
+                <div class="d-row d-flex justify-content-center align-items-center gap-4 flex-column">
+                  <div class="card border-0 shadow px-4 py-2 text-center">
+                    <h6>First Verified: {{partner.timestamp}}</h6>
+                  </div>
+                  <div class="card border-0 shadow px-4 py-2 text-center">
+                    <h6>
+                      Last Updated: {{partner.lastUpdate}}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-8">
+            <div class="card border-0 shadow" style="width: auto;">
+              <div class="card-header pb-0 border-0 pb-0 mb-0 d-flex flex-row">
+                <div class="title">
+                  <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">General Information</p>
+                </div>
+                <div class="edit-btn ms-auto">
+                  <a href="#" data-bs-toggle="modal" data-bs-target="#updatePartner">
+                    <span class="badge bg-primary py-2 shadow">Update Data</span>
+                  </a>
+                </div>
+              </div>
+              <hr class="my-0 py-0">
+              <div class="card-body">
+                <div class="d-row d-flex justify-content-center align-items-center flex-row gap-2">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3" class="text-dark">Email</span>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
+                      value="{{partner.email}}" readonly>
+                  </div>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3" class="text-dark">Telephone</span>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
+                      value="{{partner.telephone}}" readonly>
+                  </div>
+                </div>
+                <div class="d-row d-flex justify-content-center align-items-center flex-row gap-2">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3" class="text-dark">Nomor Izin</span>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
+                      value="{{partner.nib}}" readonly>
+                  </div>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon3" class="text-dark">URL Olshop</span>
+                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"
+                      value="{{partner.olshopUrl}}" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {{!-- deskripsi bisnis --}}
+            <div class="card border-0 shadow mt-3" style="width: auto;">
+              <div class="card-header pb-0 border-0 pb-0 mb-0 d-flex flex-row">
+                <div class="title">
+                  <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">Deskripsi Bisnis</p>
+                </div>
+              </div>
+              <hr class="my-0 py-0">
+              <div class="card-body">
+                <div class="d-row d-flex justify-content-start align-items-center flex-row gap-2">
+                  <div class="description">
+                    <p class="ps-3 text-justify">
+                      {{#if partner.deskripsi}}
+                      {{partner.deskripsi}}
+                      {{else}}
+                      No Information Given
+                      {{/if}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card border-0 shadow mt-3 mb-2" style="width: auto;">
+              <div class="card-header pb-0 border-0 pb-0 mb-0 d-flex flex-row">
+                <div class="title">
+                  <p style="font-family: 'Poppins';" class="pt-2 pb-0 ps-2">Informasi Founder</p>
+                </div>
+                <div class="ms-auto">
+                  <a href="/partner/profile/employee"><span class="badge amati-green ms-3 mt-2 py-2 shadow">Add
+                      Data</span></a>
+                  {{#if employee}}
+                  <a href="#" data-bs-toggle="modal" data-bs-target="#updateFounder">
+                    <span class="badge bg-primary py-2 shadow">Update Data</span>
+                  </a>
+                  {{/if}}
+                </div>
+              </div>
+              <hr class="my-0 py-0">
+              {{#if employee}}
+              {{#each employee}}
+              <div class="card-body">
+                <div class="card-body">
+                  <div class="d-row d-flex ps-3">
+                    <div class="description">
+                      {{#if image}}
+                      <a href="{{link}}" target="_blank">
+                        <img src="data:image/png;base64,{{image}}" class="rounded border-2  " alt="" height="130px"
+                          width="120px">
+                      </a>
+                      {{else}}
+                      <img src="/assets/default-user.jpg" class="rounded border-2" alt="" height="130px" width="120px">
+                      {{/if}}
+                    </div>
+                    <div class="information ms-3 d-flex flex-column justify-content-center">
+                      <h6 class="fw-bold">{{name}}</h6>
+                      <h6>{{role}}</h6>
+                      <h6>{{bio}}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {{/each}}
+              {{else}}
+              <div class="card-body">
+                <p>No data available</p>
+              </div>
+
+              {{/if}}
+            </div>
+          </div>
         </div>
+      </main>
+
+      {{!-- modal edit partner --}}
+      <div class="modal fade" id="updatePartner" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="approveModalLabel">Update Data</h5>
+              <button type="button" class="rounded-2 close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <form action="/partner/profile/update" method="post">
+                <div class="form-group">
+                  <label for="floatingInput">Email</label>
+                  <input class="form-control my-2" type="text" id="floatingInput" name="email" required
+                    value="{{partner.email}}">
+                </div>
+                <div class="form-group">
+                  <label for="floatingInput">telephone</label>
+                  <input class="form-control my-2" type="tel" id="floatingInput" name="telephone" required value="{{partner.telephone}}">
+                </div>
+                <div class="form-group">
+                  <label for="floatingInput">NIB</label>
+                  <input class="form-control my-2" type="text" id="floatingInput" name="nib" required {{#if partner.nib}}
+                    value="{{partner.nib}}" {{/if}}>
+                </div>
+                <div class="form-group">
+                  <label for="floatingInput">Link Online Shop</label>
+                  <input class="form-control my-2" type="text" id="floatingInput" name="olshopUrl" required {{#if partner.olshopUrl}}
+                    value="{{partner.olshopUrl}}" {{/if}}>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">Update</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{!-- end modal partner --}}
+
+      {{!-- modal edit member --}}
+      <div class="modal fade" id="updateFounder" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="approveModalLabel">Update Founder Data</h5>
+              <button type="button" class="rounded-2 close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <form action="/partner/profile/employee/update" method="post">
+                <div class="form-group">
+                  <label for="nameSelect">Select Employee</label>
+                  <select class="form-control" id="nameSelect" name="name">
+                    {{#each employee}}
+                    <option value="{{name}}" selected>{{name}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="floatingInput">Jabatan</label>
+                  <input class="form-control my-2" type="text" id="floatingInput" name="role" required {{#if name}}
+                    value="{{role}}" {{/if}}>
+                </div>
+                <div class="form-group">
+                  <label for="floatingInput">Link Url</label>
+                  <input class="form-control my-2" type="text" id="floatingInput" name="link" required {{#if name}}
+                    value="{{link}}" {{/if}}>
+                </div>
+                <div class="form-group">
+                  <label for="floatingInput">bio</label>
+                  <textarea class="form-control my-2" name="bio" id="floatingInput" required placeholder=""></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">Update</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{!-- end modal member --}}
+
     </div>
-  </main>
   </div>
 
 

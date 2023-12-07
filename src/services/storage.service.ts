@@ -7,7 +7,7 @@ export class StorageService {
   async storeFile(
     file: any,
     destinationPath: string,
-    options?: StorageContentType,
+    options?: StorageContentType | any,
   ): Promise<string> {
     try {
       const bucket = admin.storage().bucket();

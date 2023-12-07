@@ -10,7 +10,7 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as http from 'http';
 import 'dotenv/config';
-import { CookieOptions } from 'express';
+import express, { CookieOptions } from 'express';
 
 export const admin = fs.initializeApp({
   credential: fs.credential.cert('serviceAccount.json'),

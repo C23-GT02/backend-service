@@ -7,6 +7,6 @@ export class ApproverDTO {
   @IsEmail()
   email: string;
 
-  @IsIn(['admin', 'approver', 'partner'])
+  @IsIn(['admin', 'approver', 'partner', 'User'])
   role: string;
 }

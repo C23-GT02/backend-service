@@ -1,15 +1,14 @@
-import { IsString, IsUrl } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class MemberModel {
   @IsString()
   name: string;
 
-  @IsString()
-  role: string;
+  role?: string;
 
-  @IsString()
-  bio: string;
+  link?: string;
 
-  @IsUrl()
-  link: string;
+  bio?: string;
+
+  image?: string | Buffer;
 }

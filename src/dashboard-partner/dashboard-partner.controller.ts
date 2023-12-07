@@ -3,24 +3,28 @@ import {
   Controller,
   FileTypeValidator,
   Get,
+  HttpStatus,
   ParseFilePipe,
   Post,
   Render,
   Req,
+  Res,
+  UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { DashboardPartnerService } from './dashboard-partner.service';
 import { createProductModel } from '../models/product.model';
 import { RegisterService } from 'src/auth/register.service';
-import { FilesInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Request, Response } from 'express';
 import { idCookie } from 'src/auth/cookies.model';
 import { QrCodeService } from '../services/qrCode.service';
 import { StorageService } from 'src/services/storage.service';
 import { admin } from 'src/main';
 import { nanoid } from 'nanoid';
 import { MemberModel } from 'src/models/founder.model';
+import { DashboardAdminService } from 'src/dashboard-admin/dashboard-admin.service';
 
 @Controller('partner')
 export class DashboardPartnerController {
@@ -29,6 +33,7 @@ export class DashboardPartnerController {
     private readonly registerService: RegisterService,
     private readonly qrCodeService: QrCodeService,
     private readonly storageService: StorageService,
+    private readonly adminService: DashboardAdminService,
   ) {}
 
   private readonly partnerCollection: string = 'verifiedPartner';
@@ -49,13 +54,9 @@ export class DashboardPartnerController {
     // // }
   }
 
-  @Get('products')
-  @Render('partner-product')
-  async getPartnerProducts() {}
-
   @Post()
   @UseInterceptors(FilesInterceptor('images', 10))
-  async registerUser(
+  async registerProduct(
     @UploadedFiles(
       new ParseFilePipe({
         validators: [new FileTypeValidator({ fileType: 'image' })],
@@ -132,21 +133,106 @@ export class DashboardPartnerController {
     return create;
   }
 
+  @Get('products')
+  @Render('partner-product')
+  async getPartnerProducts() {}
+
   @Get('products/jamu')
   @Render('product-list')
   async getProductList() {}
 
   @Get('profile')
-  @Render('partner-profile')
-  async partnerProfile() {}
+  @Render('partner-profile-revisi')
+  async partnerProfile(@Req() req: Request) {
+    try {
+      const { businessName }: idCookie = req.signedCookies.id;
+      const partnerRef = `${this.partnerCollection}/${businessName}`;
+      const employeeCollectionRef = `${partnerRef}/${this.employeeCollection}`;
 
+      // Concurrently fetch partner and employee data
+      const [partner, counter, employee] = await Promise.all([
+        this.partnerService.getDocumentFromRef(partnerRef),
+        this.partnerService.countData(businessName),
+        this.partnerService.getCollectionDataFromRef(employeeCollectionRef),
+      ]);
+
+      // Load partner logo concurrently
+      if (partner && partner.logo) {
+        partner.logo = await this.adminService.loadImage(partner.logo);
+      }
+
+      return { partner, counter, employee };
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error fetching partner profile:', error);
+      throw error;
+    }
+  }
+
+  @Post('profile/update')
+  async updatePartner(@Req() req: Request, @Body() data, @Res() res: Response) {
+    try {
+      const { businessName }: idCookie = req.signedCookies.id;
+      const path = `${this.partnerCollection}/${businessName}`;
+      await this.partnerService.setOrUpdateDocument(path, data);
+      res.status(HttpStatus.OK).redirect('/partner/profile');
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Get('profile/employee')
+  @Render('create-employee')
+  async createPartnerProfile() {}
+
+  @UseInterceptors(FileInterceptor('image'))
   @Post('profile/employee')
-  async addEmployee(@Req() req: Request, @Body() employee: MemberModel) {
-    const { businessName }: idCookie = req.signedCookies.id;
-    console.log(employee);
-    const { name } = employee;
-    const ref = `${this.partnerCollection}/${businessName}/${this.employeeCollection}/${name}`;
-    return this.partnerService.setOrUpdateDocument(ref, employee);
+  async addEmployee(
+    @Req() req: Request,
+    @Body() employee: MemberModel,
+    @UploadedFile() image: Express.Multer.File,
+    @Res() res: Response,
+  ) {
+    try {
+      const { businessName }: idCookie = req.signedCookies.id;
+      const { name } = employee;
+      const partnerRef = `${this.partnerCollection}/${businessName}`;
+
+      const imagePath = `${businessName}/${this.employeeCollection}/${name}`;
+
+      employee.image = await this.storageService.storeFile(
+        image.buffer,
+        imagePath,
+        image.mimetype,
+      );
+      const ref = `${this.partnerCollection}/${businessName}/${this.employeeCollection}/${name}`;
+
+      await this.partnerService.setOrUpdateDocument(ref, employee);
+      await this.partnerService.setOrUpdateDocument(partnerRef, {
+        lastUpdate: new Date().toISOString(),
+      });
+
+      res.status(HttpStatus.CREATED).redirect('/partner/profile');
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Post('profile/employee/update')
+  async updateEmployee(
+    @Req() req: Request,
+    @Body() data: MemberModel,
+    @Res() res: Response,
+  ) {
+    try {
+      const { businessName }: idCookie = req.signedCookies.id;
+      const { name } = data;
+      const path = `${this.partnerCollection}/${businessName}/${this.employeeCollection}/${name}`;
+      await this.partnerService.setOrUpdateDocument(path, data);
+      res.status(HttpStatus.OK).redirect('/partner/profile');
+    } catch (error) {
+      return error;
+    }
   }
 
   @Get('history')
@@ -163,14 +249,9 @@ export class DashboardPartnerController {
       const data = snapshot.docs.map((doc) => {
         return { ...doc.data() }; // Include document ID in the result
       });
-      console.log(data);
       return { history: data };
     } catch (error) {
       return error;
     }
   }
-
-  @Get('/edit')
-  @Render('partner-edit')
-  async editPartnerProfile() {}
 }
