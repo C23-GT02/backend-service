@@ -314,6 +314,10 @@
                   <input class="form-control my-2" type="text" id="floatingInput" name="olshopUrl" required {{#if partner.olshopUrl}}
                     value="{{partner.olshopUrl}}" {{/if}}>
                 </div>
+                <div class="form-group">
+                  <label for="floatingInput">Deskripsi</label>
+                  <textarea class="form-control my-2" name="deskripsi" id="floatingInput" required placeholder="">{{#if partner.deskripsi}} {{partner.deskripsi}} {{/if}}</textarea>
+                </div>
                 <div class="modal-footer">
                   <button type="submit" class="btn btn-success">Update</button>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
