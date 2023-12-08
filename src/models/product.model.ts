@@ -15,6 +15,9 @@ export class createProductModel {
   harga: any;
 
   @IsString()
+  kategori: string;
+
+  @IsString()
   tags: any;
 
   @IsString()

@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { StorageService } from './storage.service';
 import { StorageContentType } from 'src/models/content-type.model';
-import { url } from 'inspector';
 
 @Injectable()
 export class QrCodeService {
@@ -49,7 +48,6 @@ export class QrCodeService {
 
     try {
       const response = await axios.request(options);
-      console.log(response);
       return response.data;
     } catch (error) {
       throw error;

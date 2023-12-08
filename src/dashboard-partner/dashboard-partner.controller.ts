@@ -25,6 +25,7 @@ import { admin } from 'src/main';
 import { nanoid } from 'nanoid';
 import { MemberModel } from 'src/models/founder.model';
 import { DashboardAdminService } from 'src/dashboard-admin/dashboard-admin.service';
+import { StorageContentType } from 'src/models/content-type.model';
 
 @Controller('partner')
 export class DashboardPartnerController {
@@ -103,11 +104,12 @@ export class DashboardPartnerController {
         .set(documentData, { merge: true });
 
       const qrPayload = JSON.stringify(documentData);
-      const qr = await this.qrCodeService.generateBatchQrCode(
-        qrPayload,
-        qrPath,
+      const qr = await this.qrCodeService.generateQrCode(qrPayload, id);
+      const url = await this.storageService.storeFile(
+        qr,
+        `${qrPath}/${id}`,
+        StorageContentType.SVG,
       );
-      console.log(qr);
       await admin
         .firestore()
         .collection(this.partnerCollection)
@@ -116,7 +118,7 @@ export class DashboardPartnerController {
         .doc(name)
         .collection('product-id')
         .doc(id)
-        .set({ qr }, { merge: true });
+        .set({ url }, { merge: true });
     }
 
     const imageUrls = await Promise.all(
@@ -124,8 +126,6 @@ export class DashboardPartnerController {
         return await this.registerService.storeImage(path, image);
       }),
     );
-
-    console.log({ cp: imageUrls });
 
     body.images = imageUrls;
 
@@ -135,7 +135,6 @@ export class DashboardPartnerController {
       JSON.stringify(qrPayload),
     );
 
-    console.log({ cpp: qr });
     body.qrcodeURL = await this.storageService.storeFile(qr, qrPath);
 
     await this.partnerService.createProduct(businessName, body);
