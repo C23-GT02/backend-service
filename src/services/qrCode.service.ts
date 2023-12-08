@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { StorageService } from './storage.service';
 import { StorageContentType } from 'src/models/content-type.model';
+import { url } from 'inspector';
 
 @Injectable()
 export class QrCodeService {
@@ -48,24 +49,27 @@ export class QrCodeService {
 
     try {
       const response = await axios.request(options);
-      console.log();
+      console.log(response);
       return response.data;
     } catch (error) {
       throw error;
     }
   }
 
-  async generateBatchQrCode(qty: number, data: any[], location: string) {
-    for (let index = 0; index < qty; index++) {
-      const qr = await this.generateQrCode(
-        JSON.stringify(data[index]),
-        `${data[index].id}-${index}`,
-      );
-      await this.storageService.storeFile(
+  async generateBatchQrCode(
+    data: any,
+    location: string,
+  ): Promise<string | Error> {
+    try {
+      const qr = await this.generateQrCode(JSON.stringify(data), `${data.id}`);
+      const url = await this.storageService.storeFile(
         qr,
-        `${location}/${data[index].id}`,
+        `${location}/${data.id}`,
         StorageContentType.SVG,
       );
+      return url;
+    } catch (error) {
+      return error;
     }
   }
 }

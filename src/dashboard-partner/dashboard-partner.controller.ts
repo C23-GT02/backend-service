@@ -65,6 +65,7 @@ export class DashboardPartnerController {
     images: Express.Multer.File[],
     @Body() body: createProductModel,
     @Req() req: Request,
+    @Res() res: Response,
   ) {
     const { harga, name, packaging, proses, deskripsi, material, tags, stock } =
       body;
@@ -82,17 +83,14 @@ export class DashboardPartnerController {
       packaging,
     };
     const { businessName }: idCookie = req.signedCookies.id;
-
     const path = `${businessName}/products/${name}`;
     const qrPath = `${path}/${name}`;
     const partnerRef = `${this.partnerCollection}/${businessName}`;
     const productRef = `${partnerRef}/products/${name}`;
 
-    const data: any[] = [];
-
     for (let i = 0; i < body.stock; i++) {
       const id = nanoid(10);
-      data.push({ id, name, partnerRef, productRef });
+      const documentData = { id, name, partnerRef, productRef };
 
       await admin
         .firestore()
@@ -102,7 +100,23 @@ export class DashboardPartnerController {
         .doc(name)
         .collection('product-id')
         .doc(id)
-        .set(data[i]);
+        .set(documentData, { merge: true });
+
+      const qrPayload = JSON.stringify(documentData);
+      const qr = await this.qrCodeService.generateBatchQrCode(
+        qrPayload,
+        qrPath,
+      );
+      console.log(qr);
+      await admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(businessName)
+        .collection(this.productsCollection)
+        .doc(name)
+        .collection('product-id')
+        .doc(id)
+        .set({ qr }, { merge: true });
     }
 
     const imageUrls = await Promise.all(
@@ -111,6 +125,8 @@ export class DashboardPartnerController {
       }),
     );
 
+    console.log({ cp: imageUrls });
+
     body.images = imageUrls;
 
     body.tags = body.tags.split(',').map((val) => val); // make the tags an array
@@ -118,11 +134,11 @@ export class DashboardPartnerController {
     const qr = await this.qrCodeService.generateQrCode(
       JSON.stringify(qrPayload),
     );
+
+    console.log({ cpp: qr });
     body.qrcodeURL = await this.storageService.storeFile(qr, qrPath);
 
-    await this.qrCodeService.generateBatchQrCode(body.stock, data, qrPath);
-
-    const create = await this.partnerService.createProduct(businessName, body);
+    await this.partnerService.createProduct(businessName, body);
 
     await admin
       .firestore()
@@ -130,7 +146,7 @@ export class DashboardPartnerController {
       .doc(name)
       .set({ productRef, partnerRef });
 
-    return create;
+    res.status(HttpStatus.CREATED).redirect('partner/profile');
   }
 
   @Get('products')

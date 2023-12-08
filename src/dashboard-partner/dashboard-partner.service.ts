@@ -40,7 +40,6 @@ export class DashboardPartnerService {
           .collection(this.productCollection)
           .doc(product.name)
           .set(product);
-
         resolve('product berhasil dibuat');
       } catch (error) {
         reject(error);
