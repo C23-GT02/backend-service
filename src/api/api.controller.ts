@@ -217,9 +217,9 @@ export class ApiController {
         .collection(this.productCollection);
       const snapshot = await collectionRef.get();
       const data = snapshot.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
+        return { ...doc.data() };
       });
-      return data;
+      return { productData: data };
     } catch (error) {
       return error;
     }
