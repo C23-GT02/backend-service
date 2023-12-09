@@ -219,7 +219,7 @@ export class ApiController {
       const data = snapshot.docs.map((doc) => {
         return { ...doc.data() };
       });
-      return { productData: data };
+      return { productCollection: data };
     } catch (error) {
       return error;
     }
