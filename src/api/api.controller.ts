@@ -225,8 +225,9 @@ export class ApiController {
     }
   }
 
-  @Get('product/:name')
-  async getProduct(@Param('name') productName: string) {
+  @Post('product')
+  async getProduct(@Body() body: { name: string }) {
+    const { name: productName } = body; // Extract the 'name' property from the request body
     try {
       const ref = await admin
         .firestore()
