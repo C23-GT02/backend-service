@@ -28,6 +28,7 @@ import { RegisterModelMobile } from 'src/models/register.model';
 import { editUserMobileModel } from 'src/models/user.mobile.model';
 import { FirestoreService } from 'src/services/firestore.service';
 import { ApiService } from './api.service';
+import { HistoryRequest } from 'src/models/historyReq.model';
 
 @Controller('api')
 export class ApiController {
@@ -41,6 +42,7 @@ export class ApiController {
 
   private readonly partnerCollection = 'verifiedPartner';
   private readonly productCollection = 'products';
+  private readonly usersCollection = 'users';
 
   // Begin Auth Controller Route
   @Post('auth/login')
@@ -278,5 +280,27 @@ export class ApiController {
       // Handle errors and return appropriate responses
       return { message: error.message || 'Internal Server Error' };
     }
+  }
+
+  @Get('history')
+  async dumpAndResolveReferences(@Body() email: HistoryRequest) {
+    const collectionRef = admin
+      .firestore()
+      .collection(`/users/${email}/history`);
+
+    const snapshot = await collectionRef.get();
+
+    const references = snapshot.docs.map((doc) => {
+      const documentData = doc.data();
+      return documentData.transactionRef?._path?.segments.join('/');
+    });
+
+    const resolvedReferences = await Promise.all(
+      references.map((reference) =>
+        this.firestoreService.resolveReference(reference),
+      ),
+    );
+
+    return { resolvedReferences };
   }
 }
