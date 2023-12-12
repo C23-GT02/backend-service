@@ -49,7 +49,7 @@ export class DashboardPartnerController {
   @UseGuards(RolesGuard)
   // @Roles(Role.Partner)
   // @Render('partner-product')
-  @Roles(Role.Partner)
+  // @Roles(Role.Partner)
   @Render('product')
   @Get()
   async partnerProduct() {
