@@ -34,7 +34,7 @@ import { HistoryRequest } from 'src/models/historyReq.model';
 import { idCookie } from 'src/auth/cookies.model';
 import { CookieAuthGuard } from 'src/auth.guard';
 
-@UseGuards(CookieAuthGuard)
+// @UseGuards(CookieAuthGuard)
 @Controller('api')
 export class ApiController {
   constructor(
