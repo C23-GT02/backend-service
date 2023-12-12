@@ -21,7 +21,7 @@ export class DashboardPartnerService {
 
       const snapshot = await collectionRef.get();
       const products = snapshot.docs.map((doc) => {
-        const productData = { id: doc.id, ...doc.data() };
+        const productData = { ...doc.data() };
         return productData;
       });
 
