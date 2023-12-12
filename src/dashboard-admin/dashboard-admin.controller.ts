@@ -6,14 +6,24 @@ import {
   Post,
   Redirect,
   Render,
+  Req,
   Res,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { DashboardAdminService } from './dashboard-admin.service';
 import { ApproverDTO } from '../models/access.model';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { RegisterUserModel } from 'src/models/register.model';
 import { AdminAccessService } from './access.service';
+import { CookieAuthGuard } from 'src/auth.guard';
+import { Roles } from 'src/auth/guard/roles.decorator';
+import { Role } from 'src/auth/guard/roles.enum';
+import { idCookie } from 'src/auth/cookies.model';
+import { admin } from 'src/main';
+
+@UseGuards(CookieAuthGuard)
+// @Roles(Role.Admin, Role.Approver)
 @Controller('admin')
 export class DashboardAdminController {
   private verifiedPartnerCollection: string = 'verifiedPartner';

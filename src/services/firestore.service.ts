@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
+import { CookieAuthGuard } from 'src/auth.guard';
 import { admin } from 'src/main';
+
 
 @Injectable()
 export class FirestoreService {

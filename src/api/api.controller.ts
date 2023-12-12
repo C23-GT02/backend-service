@@ -10,12 +10,13 @@ import {
   ParseFilePipe,
   Post,
   Query,
+  Req,
   Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { LoginService } from 'src/auth/login.service';
 import { RegisterService } from 'src/auth/register.service';
@@ -29,6 +30,7 @@ import { editUserMobileModel } from 'src/models/user.mobile.model';
 import { FirestoreService } from 'src/services/firestore.service';
 import { ApiService } from './api.service';
 import { HistoryRequest } from 'src/models/historyReq.model';
+import { idCookie } from 'src/auth/cookies.model';
 
 @Controller('api')
 export class ApiController {
@@ -178,6 +180,26 @@ export class ApiController {
     }
   }
 
+  @Get('user/signout')
+  async userSignout(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { uid }: idCookie = req.signedCookies.id;
+
+      // Revoke refresh tokens for the user
+      await admin.auth().revokeRefreshTokens(uid);
+
+      // Clear the user's session
+      res.clearCookie('session');
+      res.clearCookie('id');
+      res.status(200).send({
+        message: 'success logout',
+      });
+    } catch (error) {
+      console.error('Error revoking refresh tokens:', error);
+      throw new Error('Failed to sign out the user.');
+    }
+  }
+
   @Get('home')
   async getHomepage() {
     const product = await this.firestoreService.getAllRefWithinProducts();
@@ -286,7 +308,7 @@ export class ApiController {
   async dumpAndResolveReferences(@Body() email: HistoryRequest) {
     const collectionRef = admin
       .firestore()
-      .collection(`/users/${email}/history`);
+      .collection(`/${this.usersCollection}/${email}/history`);
 
     const snapshot = await collectionRef.get();
 
@@ -302,5 +324,32 @@ export class ApiController {
     );
 
     return { resolvedReferences };
+  }
+
+  @Get('verify')
+  async checkCookie(@Req() req: Request) {
+    try {
+      const { idToken }: idCookie = req.signedCookies.id;
+      console.log(req.signedCookies.id);
+      const session = req.signedCookies.session;
+
+      const [idTokenResult, sessionCookieResult] = await Promise.all([
+        admin.auth().verifyIdToken(idToken),
+        admin.auth().verifySessionCookie(session, true), // Set the second parameter to true if the session cookie is long-lived
+      ]);
+
+      // Do something with the verification results
+      console.log(idTokenResult);
+      console.log(sessionCookieResult);
+
+      return {
+        idToken: idTokenResult,
+        sessionCookie: sessionCookieResult,
+      };
+    } catch (error) {
+      // Handle errors here
+      console.error('Error verifying tokens:', error);
+      throw new Error('Token verification failed');
+    }
   }
 }

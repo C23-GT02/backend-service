@@ -19,11 +19,12 @@ export class RolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const idCookie = request.signedCookies.id;
-    const userRoles = idCookie.role;
 
-    if (!idCookie || userRoles) {
+    if (!idCookie || !idCookie.role) {
       return false; // User role information is not available in the cookie.
     }
+
+    const userRoles = idCookie.role;
 
     // Check if the user has any of the required roles.
     return requiredRoles.some((role) => userRoles.includes(role));

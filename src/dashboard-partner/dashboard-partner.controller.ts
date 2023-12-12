@@ -11,6 +11,7 @@ import {
   Res,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { DashboardPartnerService } from './dashboard-partner.service';
@@ -26,6 +27,10 @@ import { nanoid } from 'nanoid';
 import { MemberModel } from 'src/models/founder.model';
 import { DashboardAdminService } from 'src/dashboard-admin/dashboard-admin.service';
 import { StorageContentType } from 'src/models/content-type.model';
+import { Roles } from 'src/auth/guard/roles.decorator';
+import { Role } from 'src/auth/guard/roles.enum';
+import { CookieAuthGuard } from 'src/auth.guard';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
 
 @Controller('partner')
 export class DashboardPartnerController {
@@ -41,9 +46,10 @@ export class DashboardPartnerController {
   private readonly productsCollection: string = 'products';
   private readonly historyCollection: string = 'history';
   private readonly employeeCollection: string = 'employee';
-  // @UseGuards(CookieAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   // @Roles(Role.Partner)
   // @Render('partner-product')
+  @Roles(Role.Partner)
   @Render('product')
   @Get()
   async partnerProduct() {

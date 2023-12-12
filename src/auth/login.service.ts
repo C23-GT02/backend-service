@@ -38,6 +38,7 @@ export class LoginService {
 
   async loginUser(user: LoginUserModel) {
     const auth = getAuth(firebase);
+
     try {
       const { email, password } = user;
       const userCredential = await signInWithEmailAndPassword(
@@ -61,16 +62,13 @@ export class LoginService {
         .doc(email)
         .get();
 
-      // Initialize businessName outside the if-else block
       let businessName = null;
 
-      // Check if the document exists
       if (documentSnapshot.exists) {
-        // Now, businessName will either be the value from the document or null if it doesn't exist
         businessName = documentSnapshot.data()?.businessName;
       }
 
-      console.log(businessName);
+      console.log('Business Name:', businessName);
 
       const payload = {
         idToken,
@@ -82,9 +80,9 @@ export class LoginService {
 
       return payload;
     } catch (error) {
-      // You might want to log the error or handle it differently
       console.error('Login error:', error);
-      throw new UnauthorizedException('Login failed'); // Or return a more specific error message
+      // Provide more specific error messages based on error codes or types
+      throw new UnauthorizedException('Invalid email or password');
     }
   }
 
@@ -94,10 +92,10 @@ export class LoginService {
       const sessionCookie: string = await admin
         .auth()
         .createSessionCookie(data.idToken, { expiresIn: duration });
-      // You can customize the response based on the controller
+      // Customize the response based on the controller
       return { data, sessionCookie };
     } catch (error) {
-      console.error(error);
+      console.error('Authentication error:', error);
       return error;
     }
   }
