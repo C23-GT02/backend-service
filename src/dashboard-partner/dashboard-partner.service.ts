@@ -12,22 +12,36 @@ export class DashboardPartnerService {
   private historyCollection: string = 'history';
 
   async getAllPartnerProducts(document: string) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const collectionRef = admin
-          .firestore()
-          .collection(this.partnerCollection)
-          .doc(document)
-          .collection(this.productCollection);
-        const snapshot = await collectionRef.get();
-        const data = snapshot.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() }; // Include document ID in the result
-        });
-        resolve(data);
-      } catch (error) {
-        reject(error);
-      }
-    });
+    try {
+      const collectionRef = admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(document)
+        .collection(this.productCollection);
+
+      const snapshot = await collectionRef.get();
+      const products = snapshot.docs.map((doc) => {
+        const productData = { id: doc.id, ...doc.data() };
+        return productData;
+      });
+
+      const productsWithData = await Promise.all(
+        products.map(async (product) => {
+          if (Array.isArray(product.images)) {
+            product.images = await Promise.all(
+              product.images.map(async (imageURL) => {
+                return await this.adminService.loadImage(imageURL);
+              }),
+            );
+          }
+          return product;
+        }),
+      );
+
+      return productsWithData;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async createProduct(partner: string, product: createProductModel) {
@@ -41,7 +55,7 @@ export class DashboardPartnerService {
           .doc(product.name)
           .set(product);
 
-        resolve('product berhasil dibuat');
+        resolve('Product berhasil ditambahkan');
       } catch (error) {
         reject(error);
       }

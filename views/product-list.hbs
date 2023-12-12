@@ -20,16 +20,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-{{!-- 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css"> --}}
-
-
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
   
   <style>
     * {
     font-family: 'Poppins', sans-serif;
 }
+
 </style>
 
 </head>
@@ -104,7 +103,7 @@
         <div class="row pt-4 pr-5 pb-4 mx-2">
           <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <h4>
-            <ol class="breadcrumb">
+            <ol class="breadcrumb pt-2">
                 <li class="breadcrumb-item"><a href="/partner" class="text-decoration-none text-dark">Partner</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><a href="/partner/products" class="text-decoration-none text-dark">Product</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Jamu</li>
@@ -112,23 +111,55 @@
             </h4>
             </nav>
         </div>
+        <div class="row">
+          <div class="col d-flex gap-4 justify-content-center align-items-center">
+            <h6 class="btn bg-light shadow rounded-pill">Product</h6>
+            <h6><a href="" class="text-decoration-none text-dark">Materials</a></h6>
+            <h6><a href="" class="text-decoration-none text-dark">Process</a></h6>
+            <h6><a href="" class="text-decoration-none text-dark">Packaging</a></h6>
+          </div>
+        </div>
+        <div class="row mt-3 pt-2 px-4">
+          <div class="card p-5 shadow rounded">
+            <div class="d-flex">
+              <div class="product-image">
+                <img src="/assets/product-1.png" class="rounded shadow" alt="product-1" height="200px" width="200px">
+              </div>
+              <div class="product-details ms-4 d-flex flex-column">
+                <div class="header-row-1 d-flex">
+                  <div class="product-name">
+                  <h4 class="fw-bold">Jamu Kuat</h4>
+                  </div>
+                </div>
+                <div class="tags gap-2 pb-2 pt-1">
+                  <span class="badge bg-danger">Kesehatan</span>
+                  <span class="badge bg-primary">Minuman</span>
+                  <span class="badge bg-success">Herbal</span>
+                </div>
+                <h5 class="fw-bold text-success">Rp. 50.000</h5>
+                <h6>Stock: 50</h6>
+                <p>Jamu kuat Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius ducimus voluptate soluta praesentium, recusandae consectetur facilis est modi, quaerat laudantium placeat corporis amet laboriosam consequatur veniam. Tempore commodi molestiae provident?</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row mt-3 pt-3 px-3">
         <div class="col-md-8">
-            <table id="myTable" class="table table-striped nowrap" style="width:100%">
+            <table id="productTable" class="table table-striped nowrap" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Column 1</th>
-                        <th>Column 2</th>
+                        <th>No</th>
+                        <th>UID</th>
+                        <th>Tanggal</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Row 1 Data 1</td>
-                        <td>Row 1 Data 2</td>
-                    </tr>
-                    <tr>
-                        <td>Row 2 Data 1</td>
-                        <td>Row 2 Data 2</td>
+                      <td>1</td>
+                        <td>sh7219hsklkdaknc9</td>
+                        <td>08 Desember 2023</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -137,24 +168,15 @@
             <div class="card border-0 shadow pb-2" style="width: 20rem;">
               <div class="card-body">
                 <div class="mb-3 image d-flex flex-column justify-content-center align-items-center">
-                <img src="/assets/product-1.png" class="rounded" alt="product-1" height="200px" width="200px">
+                <img src="/assets/qr-jamu.png" class="rounded" alt="product-1" height="200px" width="200px">
                 </div>
-                <div class="d-flex">
+                <div class="d-flex justify-content-center align-items-center">
                   <div class="title">
 
-                    <h5 class="card-title fw-bold">Jamu Kuat</h5>
-                  </div>
-                  <div class="ms-auto">
-                    <span class="badge bg-success">50</span>
+                    <h5 class="card-title fw-bold text-center">Product QR</h5>
                   </div>
                 </div>
-                <div class="tags gap-2 pb-2 pt-1">
-                <span class="badge bg-danger">Kesehatan</span>
-                <span class="badge bg-primary">Minuman</span>
-                <span class="badge bg-success">Herbal</span>
-                </div>
-                <p class="card-text fw-bold text-success">Rp. 25.000</p>
-                <a href="/partner/products/jamu" class="btn btn-outline-success btn-sm rounded-pill py-2 px-3">Kelola Produk</a>
+                
               </div>
 
             </div>
@@ -171,18 +193,39 @@
 
 
 
-  <script src="/assets/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+ <script src="/assets/js/bootstrap.bundle.min.js"></script>
+  {{!-- <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script> --}}
+  <script type="module" src="/assets/js/dashboard.js"></script>
+
   <script type="module" src="/assets/js/dashboard.js"></script>
   <script>
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-} );
-  </script>
+          $(document).ready(function () {
+            // DataTable initialization
+            $('#productTable').DataTable({
+              paging: true,
+              pageLength: 18, // Default number of rows to display
+              searching: true, // Enable search
+              autoWidth: true, // Enable auto-sizing
+              scrollY: 700,
+              responsive: true,
+              columnDefs: [
+                {
+                  targets: 0, // Target the first column (index 0)
+                  orderable: false, // Make the column not orderable
+                  searchable: false, // Make the column not searchable
+                  className: 'dt-center', // Center-align the content
+                  render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1; // Calculate and return the row index
+                  }
+                }
+              ],
+            });
+          });
+        </script>
 
 </body>
 

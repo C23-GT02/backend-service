@@ -54,7 +54,7 @@ export class DashboardPartnerController {
     // // }
   }
 
-  @Post()
+  @Post('/products')
   @UseInterceptors(FilesInterceptor('images', 10))
   async registerProduct(
     @UploadedFiles(
@@ -133,9 +133,20 @@ export class DashboardPartnerController {
     return create;
   }
 
-  @Get('products')
+  @Get('/products')
   @Render('partner-product')
-  async getPartnerProducts() {}
+  async getAllProducts(@Req() req: Request) {
+    try {
+      const { businessName }: idCookie = req.signedCookies.id;
+      const products =
+        await this.partnerService.getAllPartnerProducts(businessName);
+      return { products };
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error fetching partner profile:', error);
+      throw error;
+    }
+  }
 
   @Get('products/jamu')
   @Render('product-list')
