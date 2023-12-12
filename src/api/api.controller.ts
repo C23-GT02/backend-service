@@ -13,6 +13,7 @@ import {
   Req,
   Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -31,7 +32,9 @@ import { FirestoreService } from 'src/services/firestore.service';
 import { ApiService } from './api.service';
 import { HistoryRequest } from 'src/models/historyReq.model';
 import { idCookie } from 'src/auth/cookies.model';
+import { CookieAuthGuard } from 'src/auth.guard';
 
+@UseGuards(CookieAuthGuard)
 @Controller('api')
 export class ApiController {
   constructor(
