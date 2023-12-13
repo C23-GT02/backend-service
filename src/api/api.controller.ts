@@ -327,7 +327,7 @@ export class ApiController {
       ),
     );
 
-    return  resolvedReferences;
+    return resolvedReferences;
   }
 
   @Get('verify')
