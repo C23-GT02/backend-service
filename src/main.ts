@@ -62,7 +62,9 @@ async function bootstrap() {
           "'unsafe-eval'",
           'code.jquery.com',
           'cdn.datatables.net',
+          'storage.googleapis.com',
         ],
+        imgSrc: ["'self'", 'storage.googleapis.com', 'data:'],
         // Tambahkan domain lain yang Anda perlukan ke dalam directive ini
       },
     }),

@@ -123,12 +123,12 @@
           <div class="card p-5 shadow rounded">
             <div class="d-flex">
               <div class="product-image">
-                <img src="/assets/product-1.png" class="rounded shadow" alt="product-1" height="200px" width="200px">
+                <img src="data:image/png;base64,{{products.images}}" class="rounded shadow" alt="{{products.name}}" height="200px" width="200px">
               </div>
               <div class="product-details ms-4 d-flex flex-column">
                 <div class="header-row-1 d-flex">
                   <div class="product-name">
-                  <h4 class="fw-bold">Jamu Kuat</h4>
+                  <h4 class="fw-bold">{{products.name}}</h4>
                   </div>
                 </div>
                 <div class="tags gap-2 pb-2 pt-1">
@@ -136,9 +136,9 @@
                   <span class="badge bg-primary">Minuman</span>
                   <span class="badge bg-success">Herbal</span>
                 </div>
-                <h5 class="fw-bold text-success">Rp. 50.000</h5>
-                <h6>Stock: 50</h6>
-                <p>Jamu kuat Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius ducimus voluptate soluta praesentium, recusandae consectetur facilis est modi, quaerat laudantium placeat corporis amet laboriosam consequatur veniam. Tempore commodi molestiae provident?</p>
+                <h5 class="fw-bold text-success">Rp. {{products.harga}}</h5>
+                <h6>Stock: {{products.stock}}</h6>
+                <p>{{products.deskripsi}}</p>
               </div>
             </div>
           </div>
@@ -155,12 +155,16 @@
                     </tr>
                 </thead>
                 <tbody>
+                  {{#if productIds}}
+                  {{#each productIds}}
                     <tr>
                       <td>1</td>
-                        <td>sh7219hsklkdaknc9</td>
+                        <td>{{id}}</td>
                         <td>08 Desember 2023</td>
                         <td></td>
                     </tr>
+                  {{/each}}
+                  {{/if}}
                 </tbody>
             </table>
         </div>
@@ -168,7 +172,7 @@
             <div class="card border-0 shadow pb-2" style="width: 20rem;">
               <div class="card-body">
                 <div class="mb-3 image d-flex flex-column justify-content-center align-items-center">
-                <img src="/assets/qr-jamu.png" class="rounded" alt="product-1" height="200px" width="200px">
+                <img src="{{products.qrcodeURL}}" class="rounded shadow" alt="{{products.name}}" height="200px" width="200px">
                 </div>
                 <div class="d-flex justify-content-center align-items-center">
                   <div class="title">

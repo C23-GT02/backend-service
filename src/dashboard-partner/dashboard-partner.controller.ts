@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   ParseFilePipe,
+  Param,
   Post,
   Render,
   Req,
@@ -25,6 +26,7 @@ import { admin } from 'src/main';
 import { nanoid } from 'nanoid';
 import { MemberModel } from 'src/models/founder.model';
 import { DashboardAdminService } from 'src/dashboard-admin/dashboard-admin.service';
+import slugify from 'slugify';
 
 @Controller('partner')
 export class DashboardPartnerController {
@@ -40,6 +42,7 @@ export class DashboardPartnerController {
   private readonly productsCollection: string = 'products';
   private readonly historyCollection: string = 'history';
   private readonly employeeCollection: string = 'employee';
+  private readonly productIdCollection: string = 'product-id';
   // @UseGuards(CookieAuthGuard, RolesGuard)
   // @Roles(Role.Partner)
   // @Render('partner-product')
@@ -138,9 +141,44 @@ export class DashboardPartnerController {
   async getAllProducts(@Req() req: Request) {
     try {
       const { businessName }: idCookie = req.signedCookies.id;
-      const products =
+      let products =
         await this.partnerService.getAllPartnerProducts(businessName);
+
+      // Slugify the product names
+      products = products.map((product: any) => {
+        product.slug = slugify(product.name);
+        return product;
+      });
+
       return { products };
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error fetching partner profile:', error);
+      throw error;
+    }
+  }
+
+  @Get('/products/:slug')
+  @Render('product-list')
+  async getSpecificProducts(@Req() req: Request, @Param('slug') slug: string) {
+    try {
+      const { businessName }: idCookie = req.signedCookies.id;
+      const partnerRef = `${this.partnerCollection}/${businessName}`;
+      const productRef = `${partnerRef}/products/${slug}`;
+      const productIdCollectionRef = `${productRef}/${this.productIdCollection}`;
+
+      // Concurrently fetch partner and employee data
+      const [products, productIds] = await Promise.all([
+        this.partnerService.getSpesificProduct(businessName, slug),
+        this.partnerService.getCollectionDataFromRef(productIdCollectionRef),
+      ]);
+
+      // const products = await this.partnerService.getSpesificProduct(
+      //   businessName,
+      //   slug,
+      // );
+
+      return { products, productIds };
     } catch (error) {
       // Handle errors appropriately
       console.error('Error fetching partner profile:', error);

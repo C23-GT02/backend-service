@@ -44,6 +44,40 @@ export class DashboardPartnerService {
     }
   }
 
+  async getSpesificProduct(document: string, slug: string) {
+    try {
+      const unslug = (slug: string) => {
+        return slug.replace(/-/g, ' ');
+      };
+      const nama = unslug(slug);
+      const productRef = admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(document)
+        .collection(this.productCollection)
+        .doc(nama);
+
+      const productDoc = await productRef.get();
+
+      if (!productDoc.exists) {
+        throw new Error('Product not found');
+      }
+
+      const productData = productDoc.data();
+      if (Array.isArray(productData.images)) {
+        productData.images = await Promise.all(
+          productData.images.map(async (imageURL) => {
+            return await this.adminService.loadImage(imageURL);
+          }),
+        );
+      }
+
+      return productData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createProduct(partner: string, product: createProductModel) {
     return new Promise(async (resolve, reject) => {
       try {
