@@ -307,8 +307,9 @@ export class ApiController {
     }
   }
 
-  @Get('history')
-  async dumpAndResolveReferences(@Body() email: HistoryRequest) {
+  @Post('history')
+  async dumpAndResolveReferences(@Body() data: HistoryRequest) {
+    const { email } = data;
     const collectionRef = admin
       .firestore()
       .collection(`/${this.usersCollection}/${email}/history`);
@@ -326,7 +327,7 @@ export class ApiController {
       ),
     );
 
-    return { resolvedReferences };
+    return  resolvedReferences;
   }
 
   @Get('verify')
