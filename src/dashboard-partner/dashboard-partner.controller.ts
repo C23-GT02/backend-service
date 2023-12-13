@@ -164,13 +164,18 @@ export class DashboardPartnerController {
     try {
       const { businessName }: idCookie = req.signedCookies.id;
       const partnerRef = `${this.partnerCollection}/${businessName}`;
-      const productRef = `${partnerRef}/products/${slug}`;
-      const productIdCollectionRef = `${productRef}/${this.productIdCollection}`;
+      // const productRef = `${partnerRef}/products/${slug}`;
+      const path = `${partnerRef}/products/${slug.replace(/-/g, ' ')}/${
+        this.productIdCollection
+      }`;
+
+      // const productIdCollectionRef = `${productRef}/${this.productIdCollection}`;
+      console.log(`data: ${path}`);
 
       // Concurrently fetch partner and employee data
       const [products, productIds] = await Promise.all([
         this.partnerService.getSpesificProduct(businessName, slug),
-        this.partnerService.getCollectionDataFromRef(productIdCollectionRef),
+        this.partnerService.getCollectionDataFromRef(path),
       ]);
 
       // const products = await this.partnerService.getSpesificProduct(
