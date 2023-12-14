@@ -20,15 +20,15 @@ import { CookieAuthGuard } from 'src/auth.guard';
 import { Roles } from 'src/auth/guard/roles.decorator';
 import { Role } from 'src/auth/guard/roles.enum';
 import { idCookie } from 'src/auth/cookies.model';
-import { admin } from 'src/main';
 
 @UseGuards(CookieAuthGuard)
-// @Roles(Role.Admin, Role.Approver)
+@Roles(Role.Admin)
 @Controller('admin')
 export class DashboardAdminController {
-  private verifiedPartnerCollection: string = 'verifiedPartner';
-  private unverifiedPartnerCollection: string = 'unverifiedPartner';
-  private userCollection: string = 'users';
+  private readonly verifiedPartnerCollection: string = 'verifiedPartner';
+  private readonly unverifiedPartnerCollection: string = 'unverifiedPartner';
+  private readonly productsCollection: string = 'products';
+  private readonly userCollection: string = 'users';
 
   constructor(
     private dasboardAdminService: DashboardAdminService,
@@ -50,7 +50,9 @@ export class DashboardAdminController {
 
   @Get('partner/:id')
   @Render('verified-partner')
-  async getPartnerData(@Param('id') id: string) {
+  async getPartnerData(@Req() req: Request, @Param('id') id: string) {
+    const { businessName }: idCookie = req.signedCookies.id;
+    const productRef = `${this.verifiedPartnerCollection}/${businessName}/${this.productsCollection}`;
     const data: RegisterUserModel =
       await this.dasboardAdminService.getPartnerById(
         this.verifiedPartnerCollection,
@@ -58,8 +60,10 @@ export class DashboardAdminController {
       );
 
     const image = await this.dasboardAdminService.loadImage(data.logo);
-
-    return { data, image };
+    const products =
+      await this.dasboardAdminService.getAllDataWithinCollection(productRef);
+    console.log(products);
+    return { data, image, products };
   }
 
   @Get('approval')
@@ -93,6 +97,7 @@ export class DashboardAdminController {
     res.redirect('/admin/approval');
   }
 
+  @Roles(Role.Admin)
   @Get('access')
   @Render('access')
   async getAccessPage() {
@@ -103,6 +108,7 @@ export class DashboardAdminController {
     return { data: data, email: emails };
   }
 
+  @Roles(Role.Admin)
   @Redirect('/admin/access')
   @Post('access')
   async CreateUserRole(
@@ -111,6 +117,7 @@ export class DashboardAdminController {
     await this.adminAccessService.createUserRole(body);
   }
 
+  @Roles(Role.Admin)
   @Post('access/delete')
   async DeleteUserRole(@Body('email') email: string, @Res() res: Response) {
     await this.adminAccessService.deleteUserRole(email);
