@@ -11,6 +11,16 @@ import * as session from 'express-session';
 import * as http from 'http';
 import 'dotenv/config';
 import express, { CookieOptions } from 'express';
+import Handlebars from 'handlebars';
+
+Handlebars.registerHelper('formatCurrency', function (value) {
+  const formattedValue = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  }).format(value);
+
+  return new Handlebars.SafeString(formattedValue);
+});
 
 export const admin = fs.initializeApp({
   credential: fs.credential.cert('serviceAccount.json'),
@@ -60,9 +70,13 @@ async function bootstrap() {
           "'self'",
           "'unsafe-inline'",
           "'unsafe-eval'",
+          "'unsafe-hashes'",
           'code.jquery.com',
           'cdn.datatables.net',
+          'storage.googleapis.com',
         ],
+        scriptSrcAttr: ["'none'"],
+        imgSrc: ["'self'", 'storage.googleapis.com', 'data:'],
         // Tambahkan domain lain yang Anda perlukan ke dalam directive ini
       },
     }),

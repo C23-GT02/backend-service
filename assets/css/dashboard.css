@@ -3,3 +3,8 @@
 * {
     font-family: 'Poppins', sans-serif;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0;
+}
+

@@ -72,7 +72,7 @@ export class LoginController {
   private readonly roleRedirects = {
     admin: '/admin',
     approver: '/admin', // Redirecting approvers to the same URL as admins
-    partner: '/partner',
+    partner: '/partner/profile',
     default: '/register', // Default redirect for other roles
   };
 

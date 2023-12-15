@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { admin } from 'src/main';
 import { createProductModel } from '../models/product.model';
 import { DashboardAdminService } from 'src/dashboard-admin/dashboard-admin.service';
+import slugify from 'slugify';
 
 @Injectable()
 export class DashboardPartnerService {
@@ -12,22 +13,122 @@ export class DashboardPartnerService {
   private historyCollection: string = 'history';
 
   async getAllPartnerProducts(document: string) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const collectionRef = admin
-          .firestore()
-          .collection(this.partnerCollection)
-          .doc(document)
-          .collection(this.productCollection);
-        const snapshot = await collectionRef.get();
-        const data = snapshot.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() }; // Include document ID in the result
-        });
-        resolve(data);
-      } catch (error) {
-        reject(error);
+    try {
+      const collectionRef = admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(document)
+        .collection(this.productCollection);
+
+      const snapshot = await collectionRef.get();
+      const products = snapshot.docs.map((doc) => {
+        const productData = { ...doc.data() };
+        return productData;
+      });
+
+      const productsWithData = await Promise.all(
+        products.map(async (product) => {
+          if (Array.isArray(product.images)) {
+            product.images = await Promise.all(
+              product.images.map(async (imageURL) => {
+                return await this.adminService.loadImage(imageURL);
+              }),
+            );
+          }
+          return product;
+        }),
+      );
+
+      return productsWithData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getSpesificProduct(document: string, slug: string) {
+    try {
+      const unslug = (slug: string) => {
+        return slug.replace(/-/g, ' ');
+      };
+      const nama = unslug(slug);
+      const productRef = admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(document)
+        .collection(this.productCollection)
+        .doc(nama);
+
+      const productDoc = await productRef.get();
+
+      if (!productDoc.exists) {
+        throw new Error('Product not found');
       }
-    });
+
+      const productData = productDoc.data();
+      // Calculate and add slugifiedName to the productData
+      productData.slugifiedName = slugify(productData.name);
+
+      if (Array.isArray(productData.images)) {
+        productData.images = await Promise.all(
+          productData.images.map(async (imageURL) => {
+            return await this.adminService.loadImage(imageURL);
+          }),
+        );
+      }
+
+      return productData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteSpecificProduct(document: string, slug: string, id: string) {
+    try {
+      const unslug = (slug: string) => {
+        return slug.replace(/-/g, ' ');
+      };
+      const name = unslug(slug);
+      const productRef = admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(document)
+        .collection(this.productCollection)
+        .doc(name);
+
+      const productDoc = await productRef.get(); // ambil data product
+
+      if (!productDoc.exists) {
+        throw new Error('Product not found');
+      }
+
+      // kurangin stock -1
+      const productData = productDoc.data();
+      if (productData.stock && productData.stock > 0) {
+        await productRef.update({
+          stock: productData.stock - 1,
+        });
+      } else {
+        throw new Error('Insufficient stock');
+      }
+
+      // Delete product by ID from subcollection
+      const productIdRef = await productRef.collection('product-id').doc(id);
+      const productIdDoc = await productIdRef.get();
+
+      if (!productIdDoc.exists) {
+        throw new Error('Product ID not found');
+      }
+
+      await productIdRef.delete();
+
+      return 'Product deleted successfully';
+    } catch (error) {
+      console.error(
+        'Error getting collection data from Firebase:',
+        error.message,
+      );
+      throw error;
+    }
   }
 
   async createProduct(partner: string, product: createProductModel) {
@@ -40,7 +141,10 @@ export class DashboardPartnerService {
           .collection(this.productCollection)
           .doc(product.name)
           .set(product);
-        resolve('product berhasil dibuat');
+
+
+        resolve('Product berhasil ditambahkan');
+
       } catch (error) {
         reject(error);
       }
