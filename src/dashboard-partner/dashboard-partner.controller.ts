@@ -77,8 +77,17 @@ export class DashboardPartnerController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const { harga, name, packaging, proses, deskripsi, material, tags, stock } =
-      body;
+    const {
+      harga,
+      name,
+      packaging,
+      kategori,
+      proses,
+      deskripsi,
+      material,
+      tags,
+      stock,
+    } = body;
 
     body.harga = parseInt(harga); // convert string to number
     body.stock = parseInt(stock);
@@ -87,6 +96,7 @@ export class DashboardPartnerController {
       name,
       harga,
       deskripsi,
+      kategori,
       tags,
       material,
       proses,
