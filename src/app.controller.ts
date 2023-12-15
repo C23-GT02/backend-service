@@ -27,7 +27,7 @@ export class AppController {
       // Clear the user's session
       res.clearCookie('session');
       res.clearCookie('id');
-      res.status(200).render('/login');
+      res.redirect('https://backend-service-fmgaz4qprq-as.a.run.app');
     } catch (error) {
       console.error('Error revoking refresh tokens:', error);
       throw new Error('Failed to sign out the user.');
