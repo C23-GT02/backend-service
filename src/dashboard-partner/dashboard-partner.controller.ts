@@ -34,6 +34,7 @@ import { Role } from 'src/auth/guard/roles.enum';
 import { CookieAuthGuard } from 'src/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 
+@UseGuards(CookieAuthGuard)
 @Controller('partner')
 export class DashboardPartnerController {
   constructor(
@@ -49,8 +50,8 @@ export class DashboardPartnerController {
   private readonly historyCollection: string = 'history';
   private readonly employeeCollection: string = 'employee';
   private readonly productIdCollection: string = 'product-id';
- 
 
+  @Roles(Role.Partner)
   @Render('product')
   @Get()
   async partnerProduct() {
@@ -62,6 +63,7 @@ export class DashboardPartnerController {
     // // }
   }
 
+  @Roles(Role.Partner)
   @Post('/products')
   @UseInterceptors(FilesInterceptor('images', 10))
   async registerProduct(
@@ -153,11 +155,9 @@ export class DashboardPartnerController {
       .set({ productRef, partnerRef });
 
     res.redirect(`/partner/products`);
-
-    //     res.status(HttpStatus.CREATED).redirect('partner/profile');
-
   }
 
+  @Roles(Role.Partner)
   @Get('/products')
   @Render('partner-product')
   async getAllProducts(@Req() req: Request) {
@@ -213,6 +213,7 @@ export class DashboardPartnerController {
     }
   }
 
+  @Roles(Role.Partner)
   @Post('/products/:slug/:id')
   async deleteProduct(
     @Req() req: Request,
@@ -234,10 +235,12 @@ export class DashboardPartnerController {
     }
   }
 
+  @Roles(Role.Partner)
   @Get('products/jamu')
   @Render('product-list')
   async getProductList() {}
 
+  @Roles(Role.Partner)
   @Get('profile')
   @Render('partner-profile-revisi')
   async partnerProfile(@Req() req: Request) {
@@ -266,6 +269,7 @@ export class DashboardPartnerController {
     }
   }
 
+  @Roles(Role.Partner)
   @Post('profile/update')
   async updatePartner(@Req() req: Request, @Body() data, @Res() res: Response) {
     try {
@@ -315,6 +319,7 @@ export class DashboardPartnerController {
     }
   }
 
+  @Roles(Role.Partner)
   @Post('profile/employee/update')
   async updateEmployee(
     @Req() req: Request,
@@ -332,6 +337,7 @@ export class DashboardPartnerController {
     }
   }
 
+  @Roles(Role.Partner)
   @Get('history')
   @Render('history-revisi')
   async getHistory(@Req() req: Request) {
