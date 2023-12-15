@@ -13,7 +13,6 @@ import {
   Req,
   Res,
   UploadedFile,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -32,7 +31,8 @@ import { FirestoreService } from 'src/services/firestore.service';
 import { ApiService } from './api.service';
 import { HistoryRequest } from 'src/models/historyReq.model';
 import { idCookie } from 'src/auth/cookies.model';
-import { CookieAuthGuard } from 'src/auth.guard';
+import { Roles } from 'src/auth/guard/roles.decorator';
+import { Role } from 'src/auth/guard/roles.enum';
 
 // @UseGuards(CookieAuthGuard)
 @Controller('api')
@@ -99,7 +99,7 @@ export class ApiController {
   }
 
   // Begin User Controller Route
-
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Get('user')
   async getUserData(@Query('email') email: string, @Res() res: Response) {
     try {
@@ -121,6 +121,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Post('user/edit')
   @UseInterceptors(FileInterceptor('image'))
   async editUserAuth(
@@ -170,6 +171,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Post('user/reset')
   async resetPassword(@Body('email') email: string) {
     try {
@@ -183,6 +185,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Get('user/signout')
   async userSignout(@Req() req: Request, @Res() res: Response) {
     try {
@@ -203,6 +206,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Get('home')
   async getHomepage() {
     const product = await this.firestoreService.getAllRefWithinProducts();
@@ -212,6 +216,7 @@ export class ApiController {
     return { productCollection: product, partnerCollection: partner };
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Get('partner/:name')
   async getPartner(@Param('name') partnerName: string) {
     try {
@@ -234,6 +239,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Get('product')
   async getAllProductPartner(@Query('partner') partnerName: string) {
     try {
@@ -253,6 +259,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Post('product')
   async getProduct(@Body() body: { name: string }) {
     const { name: productName } = body; // Extract the 'name' property from the request body
@@ -286,6 +293,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Get('qr')
   async getQRData(@Query('productRef') product: string) {
     try {
@@ -296,6 +304,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Post('qr')
   async RateProduct(@Body() body: RateModel) {
     try {
@@ -307,6 +316,7 @@ export class ApiController {
     }
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Post('history')
   async dumpAndResolveReferences(@Body() data: HistoryRequest) {
     const { email } = data;
@@ -330,6 +340,7 @@ export class ApiController {
     return resolvedReferences;
   }
 
+  @Roles(Role.Admin, Role.Approver, Role.Partner, Role.User)
   @Get('verify')
   async checkCookie(@Req() req: Request) {
     try {

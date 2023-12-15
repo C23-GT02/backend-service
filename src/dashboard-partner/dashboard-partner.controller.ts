@@ -32,7 +32,6 @@ import { StorageContentType } from 'src/models/content-type.model';
 import { Roles } from 'src/auth/guard/roles.decorator';
 import { Role } from 'src/auth/guard/roles.enum';
 import { CookieAuthGuard } from 'src/auth.guard';
-import { RolesGuard } from 'src/auth/guard/roles.guard';
 
 @UseGuards(CookieAuthGuard)
 @Controller('partner')

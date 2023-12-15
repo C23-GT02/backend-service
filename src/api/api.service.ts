@@ -2,9 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
-  UseGuards,
 } from '@nestjs/common';
-import { CookieAuthGuard } from 'src/auth.guard';
 import { admin } from 'src/main';
 import { RateFinal, RateModel } from 'src/models/rating.model';
 
