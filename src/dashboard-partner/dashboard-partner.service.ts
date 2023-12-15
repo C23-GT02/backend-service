@@ -142,7 +142,9 @@ export class DashboardPartnerService {
           .doc(product.name)
           .set(product);
 
+
         resolve('Product berhasil ditambahkan');
+
       } catch (error) {
         reject(error);
       }

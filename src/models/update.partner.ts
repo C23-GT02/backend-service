@@ -1,4 +1,10 @@
-import { IsEmail, IsMobilePhone, IsNumberString, IsUrl } from 'class-validator';
+import {
+  IsEmail,
+  IsMobilePhone,
+  IsNumberString,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class updatePartner {
   @IsEmail()
@@ -12,4 +18,7 @@ export class updatePartner {
 
   @IsUrl()
   olshopUrl: string;
+
+  @IsString()
+  deskripsi: string;
 }

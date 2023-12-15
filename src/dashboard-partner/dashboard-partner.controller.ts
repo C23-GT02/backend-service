@@ -12,6 +12,7 @@ import {
   Res,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { DashboardPartnerService } from './dashboard-partner.service';
@@ -27,6 +28,11 @@ import { nanoid } from 'nanoid';
 import { MemberModel } from 'src/models/founder.model';
 import { DashboardAdminService } from 'src/dashboard-admin/dashboard-admin.service';
 import slugify from 'slugify';
+import { StorageContentType } from 'src/models/content-type.model';
+import { Roles } from 'src/auth/guard/roles.decorator';
+import { Role } from 'src/auth/guard/roles.enum';
+import { CookieAuthGuard } from 'src/auth.guard';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
 
 @Controller('partner')
 export class DashboardPartnerController {
@@ -43,9 +49,8 @@ export class DashboardPartnerController {
   private readonly historyCollection: string = 'history';
   private readonly employeeCollection: string = 'employee';
   private readonly productIdCollection: string = 'product-id';
-  // @UseGuards(CookieAuthGuard, RolesGuard)
-  // @Roles(Role.Partner)
-  // @Render('partner-product')
+ 
+
   @Render('product')
   @Get()
   async partnerProduct() {
@@ -86,17 +91,14 @@ export class DashboardPartnerController {
       packaging,
     };
     const { businessName }: idCookie = req.signedCookies.id;
-
     const path = `${businessName}/products/${name}`;
     const qrPath = `${path}/${name}`;
     const partnerRef = `${this.partnerCollection}/${businessName}`;
     const productRef = `${partnerRef}/products/${name}`;
 
-    const data: any[] = [];
-
     for (let i = 0; i < body.stock; i++) {
       const id = nanoid(10);
-      data.push({ id, name, partnerRef, productRef });
+      const documentData = { id, name, partnerRef, productRef };
 
       await admin
         .firestore()
@@ -106,7 +108,24 @@ export class DashboardPartnerController {
         .doc(name)
         .collection('product-id')
         .doc(id)
-        .set(data[i]);
+        .set(documentData, { merge: true });
+
+      const qrPayload = JSON.stringify(documentData);
+      const qr = await this.qrCodeService.generateQrCode(qrPayload, id);
+      const url = await this.storageService.storeFile(
+        qr,
+        `${qrPath}/${id}`,
+        StorageContentType.SVG,
+      );
+      await admin
+        .firestore()
+        .collection(this.partnerCollection)
+        .doc(businessName)
+        .collection(this.productsCollection)
+        .doc(name)
+        .collection('product-id')
+        .doc(id)
+        .set({ url }, { merge: true });
     }
 
     const imageUrls = await Promise.all(
@@ -122,19 +141,22 @@ export class DashboardPartnerController {
     const qr = await this.qrCodeService.generateQrCode(
       JSON.stringify(qrPayload),
     );
+
     body.qrcodeURL = await this.storageService.storeFile(qr, qrPath);
 
-    await this.qrCodeService.generateBatchQrCode(body.stock, data, qrPath);
-
-    const create = await this.partnerService.createProduct(businessName, body);
+    await this.partnerService.createProduct(businessName, body);
 
     await admin
       .firestore()
       .collection(this.productsCollection)
       .doc(name)
       .set({ productRef, partnerRef });
+
     res.redirect(`/partner/products`);
     return create;
+
+//     res.status(HttpStatus.CREATED).redirect('partner/profile');
+
   }
 
   @Get('/products')

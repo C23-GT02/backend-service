@@ -14,6 +14,8 @@ import { StorageService } from './services/storage.service';
 import { ApiController } from './api/api.controller';
 import { FirestoreService } from './services/firestore.service';
 import { ApiService } from './api/api.service';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guard/roles.guard';
 
 @Module({
   imports: [],
@@ -36,6 +38,10 @@ import { ApiService } from './api/api.service';
     StorageService,
     FirestoreService,
     ApiService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
 export class AppModule {}

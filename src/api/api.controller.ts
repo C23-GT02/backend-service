@@ -10,12 +10,14 @@ import {
   ParseFilePipe,
   Post,
   Query,
+  Req,
   Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { LoginService } from 'src/auth/login.service';
 import { RegisterService } from 'src/auth/register.service';
@@ -28,7 +30,11 @@ import { RegisterModelMobile } from 'src/models/register.model';
 import { editUserMobileModel } from 'src/models/user.mobile.model';
 import { FirestoreService } from 'src/services/firestore.service';
 import { ApiService } from './api.service';
+import { HistoryRequest } from 'src/models/historyReq.model';
+import { idCookie } from 'src/auth/cookies.model';
+import { CookieAuthGuard } from 'src/auth.guard';
 
+// @UseGuards(CookieAuthGuard)
 @Controller('api')
 export class ApiController {
   constructor(
@@ -41,6 +47,7 @@ export class ApiController {
 
   private readonly partnerCollection = 'verifiedPartner';
   private readonly productCollection = 'products';
+  private readonly usersCollection = 'users';
 
   // Begin Auth Controller Route
   @Post('auth/login')
@@ -176,6 +183,26 @@ export class ApiController {
     }
   }
 
+  @Get('user/signout')
+  async userSignout(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { uid }: idCookie = req.signedCookies.id;
+
+      // Revoke refresh tokens for the user
+      await admin.auth().revokeRefreshTokens(uid);
+
+      // Clear the user's session
+      res.clearCookie('session');
+      res.clearCookie('id');
+      res.status(200).send({
+        message: 'success logout',
+      });
+    } catch (error) {
+      console.error('Error revoking refresh tokens:', error);
+      throw new Error('Failed to sign out the user.');
+    }
+  }
+
   @Get('home')
   async getHomepage() {
     const product = await this.firestoreService.getAllRefWithinProducts();
@@ -217,16 +244,18 @@ export class ApiController {
         .collection(this.productCollection);
       const snapshot = await collectionRef.get();
       const data = snapshot.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
+        const productData = { ...doc.data() };
+        return { product: productData };
       });
-      return data;
+      return { productCollection: data };
     } catch (error) {
       return error;
     }
   }
 
-  @Get('product/:name')
-  async getProduct(@Param('name') productName: string) {
+  @Post('product')
+  async getProduct(@Body() body: { name: string }) {
+    const { name: productName } = body; // Extract the 'name' property from the request body
     try {
       const ref = await admin
         .firestore()
@@ -275,6 +304,56 @@ export class ApiController {
     } catch (error) {
       // Handle errors and return appropriate responses
       return { message: error.message || 'Internal Server Error' };
+    }
+  }
+
+  @Post('history')
+  async dumpAndResolveReferences(@Body() data: HistoryRequest) {
+    const { email } = data;
+    const collectionRef = admin
+      .firestore()
+      .collection(`/${this.usersCollection}/${email}/history`);
+
+    const snapshot = await collectionRef.get();
+
+    const references = snapshot.docs.map((doc) => {
+      const documentData = doc.data();
+      return documentData.transactionRef?._path?.segments.join('/');
+    });
+
+    const resolvedReferences = await Promise.all(
+      references.map((reference) =>
+        this.firestoreService.resolveReference(reference),
+      ),
+    );
+
+    return resolvedReferences;
+  }
+
+  @Get('verify')
+  async checkCookie(@Req() req: Request) {
+    try {
+      const { idToken }: idCookie = req.signedCookies.id;
+      console.log(req.signedCookies.id);
+      const session = req.signedCookies.session;
+
+      const [idTokenResult, sessionCookieResult] = await Promise.all([
+        admin.auth().verifyIdToken(idToken),
+        admin.auth().verifySessionCookie(session, true), // Set the second parameter to true if the session cookie is long-lived
+      ]);
+
+      // Do something with the verification results
+      console.log(idTokenResult);
+      console.log(sessionCookieResult);
+
+      return {
+        idToken: idTokenResult,
+        sessionCookie: sessionCookieResult,
+      };
+    } catch (error) {
+      // Handle errors here
+      console.error('Error verifying tokens:', error);
+      throw new Error('Token verification failed');
     }
   }
 }
