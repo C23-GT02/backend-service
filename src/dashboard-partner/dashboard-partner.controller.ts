@@ -51,15 +51,10 @@ export class DashboardPartnerController {
   private readonly productIdCollection: string = 'product-id';
 
   @Roles(Role.Partner)
-  @Render('product')
+  // @Render('product')
   @Get()
-  async partnerProduct() {
-    // const { businessName }: idCookie = req.signedCookies.id;
-    // // if (businessName != null) {
-    // //   res.redirect(`partner/${businessName}`);
-    // // } else {
-    // //   return 'partner not found';
-    // // }
+  async partnerProduct(@Res() res: Response) {
+    res.redirect(`partner/profile`);
   }
 
   @Roles(Role.Partner)
