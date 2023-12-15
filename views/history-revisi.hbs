@@ -15,6 +15,15 @@
 
   <!-- Custom styles for this template -->
   <link href="/assets/css/dashboard.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    * {
+    font-family: 'Poppins', sans-serif;
+}
+</style>
 </head>
 
 <body>
@@ -58,8 +67,9 @@
         <div class="position-sticky pt-3">
           <ul class="nav flex-column">
             <li class="nav-item my-1">
-              <a class="nav-link" href="/partner">
-                Home
+              <a class="nav-link" href="/partner/profile" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                Profiles
               </a>
             </li>
             <li class="nav-item my-1">
@@ -71,12 +81,6 @@
               <a class="nav-link active" href="#" aria-disabled="true">
                 <span data-feather="bar-chart-2"></span>
                 History
-              </a>
-            </li>
-            <li class="nav-item my-1">
-              <a class="nav-link" href="/partner/profile" aria-disabled="true">
-                <span data-feather="bar-chart-2"></span>
-                Profiles
               </a>
             </li>
           </ul>

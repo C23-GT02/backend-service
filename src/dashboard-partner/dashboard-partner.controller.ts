@@ -68,6 +68,7 @@ export class DashboardPartnerController {
     images: Express.Multer.File[],
     @Body() body: createProductModel,
     @Req() req: Request,
+    @Res() res: Response,
   ) {
     const { harga, name, packaging, proses, deskripsi, material, tags, stock } =
       body;
@@ -132,7 +133,7 @@ export class DashboardPartnerController {
       .collection(this.productsCollection)
       .doc(name)
       .set({ productRef, partnerRef });
-
+    res.redirect(`/partner/products`);
     return create;
   }
 
@@ -187,6 +188,27 @@ export class DashboardPartnerController {
     } catch (error) {
       // Handle errors appropriately
       console.error('Error fetching partner profile:', error);
+      throw error;
+    }
+  }
+
+  @Post('/products/:slug/:id')
+  async deleteProduct(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('slug') slug: string,
+    @Param('id') id: string,
+  ) {
+    try {
+      const { businessName }: idCookie = req.signedCookies.id;
+      const result = await this.partnerService.deleteSpecificProduct(
+        businessName,
+        slug,
+        id,
+      );
+      res.redirect(`/partner/products/${slug}`);
+      return { message: result };
+    } catch (error) {
       throw error;
     }
   }

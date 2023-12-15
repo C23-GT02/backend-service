@@ -74,8 +74,9 @@
         <div class="position-sticky pt-3">
           <ul class="nav flex-column">
             <li class="nav-item my-1">
-              <a class="nav-link" href="/partner">
-                Home
+              <a class="nav-link" href="/partner/profile" aria-disabled="true">
+                <span data-feather="bar-chart-2"></span>
+                Profiles
               </a>
             </li>
             <li class="nav-item my-1">
@@ -87,12 +88,6 @@
               <a class="nav-link" href="/partner/history" aria-disabled="true">
                 <span data-feather="bar-chart-2"></span>
                 History
-              </a>
-            </li>
-            <li class="nav-item my-1">
-              <a class="nav-link" href="/partner/profile" aria-disabled="true">
-                <span data-feather="bar-chart-2"></span>
-                Profiles
               </a>
             </li>
           </ul>
@@ -120,8 +115,18 @@
           </div>
         </div>
         <div class="row mt-3 pt-2 px-4">
-          <div class="card p-5 shadow rounded">
-            <div class="d-flex">
+          <div class="card shadow rounded">
+            <div class="card-header d-flex flex-row">
+               <div class="d-flex">
+                <p class="h6 fw-bold pt-2">Product Overview</p>
+              </div>
+              <div class="edit-btn ms-auto">
+                  <a href="#" data-bs-toggle="modal" data-bs-target="#updatePartner">
+                    <span class="badge bg-warning py-2 shadow">Update Data</span>
+                  </a>
+                </div>
+            </div>
+            <div class="d-flex p-5">
               <div class="product-image">
                 <img src="data:image/png;base64,{{products.images}}" class="rounded shadow" alt="{{products.name}}" height="200px" width="200px">
               </div>
@@ -132,13 +137,86 @@
                   </div>
                 </div>
                 <div class="tags gap-2 pb-2 pt-1">
-                  <span class="badge bg-danger">Kesehatan</span>
-                  <span class="badge bg-primary">Minuman</span>
-                  <span class="badge bg-success">Herbal</span>
+                  {{#each products.tags}}
+                    <span class="badge bg-success">{{this}}</span>
+                  {{/each}}
                 </div>
                 <h5 class="fw-bold text-success">Rp. {{products.harga}}</h5>
                 <h6>Stock: {{products.stock}}</h6>
                 <p>{{products.deskripsi}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3 pt-2 px-2">
+          <div class="col-md-4">
+            <div class="card shadow rounded">
+              <div class="card-header d-flex flex-row">
+                <div class="d-flex">
+                  <p class="h6 fw-bold pt-2">Raw Materials</p>
+                </div>
+                <div class="edit-btn ms-auto">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#updatePartner">
+                      <span class="badge bg-warning py-2 shadow">Update Data</span>
+                    </a>
+                  </div>
+              </div>
+              <div class="d-flex px-5 pt-5 pb-2 flex-column justify-content-center align-items-center">
+                <div class="product-image">
+                  <img src="/assets/materials-jamu.jpg" class="rounded shadow" alt="{{products.name}}" height="200px" width="200px">
+                </div>
+                <div class="product-details mt-3">
+                  <div class="header-row-1">
+                  <p class="text-center">{{products.material}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="col-md-4">
+            <div class="card shadow rounded">
+              <div class="card-header d-flex flex-row">
+                <div class="d-flex">
+                  <p class="h6 fw-bold pt-2">Processing</p>
+                </div>
+                <div class="edit-btn ms-auto">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#updatePartner">
+                      <span class="badge bg-warning py-2 shadow">Update Data</span>
+                    </a>
+                  </div>
+              </div>
+              <div class="d-flex px-5 pt-5 pb-2 flex-column justify-content-center align-items-center">
+                <div class="product-image">
+                  <img src="/assets/materials-jamu.jpg" class="rounded shadow" alt="{{products.name}}" height="200px" width="200px">
+                </div>
+                <div class="product-details mt-3">
+                  <div class="header-row-1">
+                  <p class="text-center">{{products.proses}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="col-md-4">
+            <div class="card shadow rounded">
+              <div class="card-header d-flex flex-row">
+                <div class="d-flex">
+                  <p class="h6 fw-bold pt-2">Packaging</p>
+                </div>
+                <div class="edit-btn ms-auto">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#updatePartner">
+                      <span class="badge bg-warning py-2 shadow">Update Data</span>
+                    </a>
+                  </div>
+              </div>
+              <div class="d-flex px-5 pt-5 pb-2 flex-column justify-content-center align-items-center">
+                <div class="product-image">
+                  <img src="/assets/materials-jamu.jpg" class="rounded shadow" alt="{{products.name}}" height="200px" width="200px">
+                </div>
+                <div class="product-details mt-3">
+                  <div class="header-row-1">
+                  <p class="text-center">{{products.packaging}}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -159,9 +237,12 @@
                   {{#each productIds}}
                     <tr>
                       <td>1</td>
-                        <td>{{id}}</td>
+                        <td>{{this.id}}</td>
                         <td>08 Desember 2023</td>
-                        <td></td>
+                        <td class="d-flex flex-row"><form action="/partner/products/{{../products.slugifiedName}}/{{this.id}}?_method=DELETE" method="POST"><button type="submit" class="badge bg-danger border-0" title="Hapus Product">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form><button class="badge bg-success ms-1 border-0" title="Download QR"><a href="" class="text-decoration-none text-white"><i class="bi bi-cloud-arrow-down"></i></a></button></td>
                     </tr>
                   {{/each}}
                   {{/if}}
@@ -205,7 +286,6 @@
   <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script> --}}
   <script type="module" src="/assets/js/dashboard.js"></script>
 
-  <script type="module" src="/assets/js/dashboard.js"></script>
   <script>
           $(document).ready(function () {
             // DataTable initialization
@@ -229,6 +309,43 @@
               ],
             });
           });
+        </script>
+        <script>
+          function showContent(contentType) {
+  let content = '';
+
+  if (contentType === 'product') {
+    // Konten produk
+    content = `
+      <div class="card p-5 shadow rounded">
+        <!-- Konten produk -->
+      </div>
+    `;
+  } else if (contentType === 'materials') {
+    // Konten materials
+    content = `
+      <div class="card p-5 shadow rounded">
+        <!-- Konten materials -->
+      </div>
+    `;
+  } else if (contentType === 'process') {
+    // Konten process
+    content = `
+      <div class="card p-5 shadow rounded">
+        <!-- Konten process -->
+      </div>
+    `;
+  } else if (contentType === 'packaging') {
+    // Konten packaging
+    content = `
+      <div class="card p-5 shadow rounded">
+        <!-- Konten packaging -->
+      </div>
+    `;
+  }
+
+  document.getElementById('contentContainer').innerHTML = content;
+}
         </script>
 
 </body>
