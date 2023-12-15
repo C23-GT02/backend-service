@@ -22,7 +22,6 @@ import { Role } from 'src/auth/guard/roles.enum';
 import { idCookie } from 'src/auth/cookies.model';
 
 @UseGuards(CookieAuthGuard)
-@Roles(Role.Admin)
 @Controller('admin')
 export class DashboardAdminController {
   private readonly verifiedPartnerCollection: string = 'verifiedPartner';
@@ -35,10 +34,12 @@ export class DashboardAdminController {
     private adminAccessService: AdminAccessService,
   ) {}
 
+  @Roles(Role.Approver, Role.Admin)
   @Redirect('/admin/partner')
   @Get()
   async redirectAdmin() {}
 
+  @Roles(Role.Approver, Role.Admin)
   @Get('partner')
   @Render('verified')
   async getVerifiedPartner() {
@@ -48,6 +49,7 @@ export class DashboardAdminController {
     return { data };
   }
 
+  @Roles(Role.Approver, Role.Admin)
   @Get('partner/:id')
   @Render('verified-partner')
   async getPartnerData(@Req() req: Request, @Param('id') id: string) {
@@ -66,6 +68,7 @@ export class DashboardAdminController {
     return { data, image, products };
   }
 
+  @Roles(Role.Approver, Role.Admin)
   @Get('approval')
   @Render('unverified')
   async getUnverifiedPartner() {
@@ -75,6 +78,7 @@ export class DashboardAdminController {
     return { data };
   }
 
+  @Roles(Role.Approver, Role.Admin)
   @Render('unverifiedPartner')
   @Get('approval/:id')
   async getUnverifiedPartnerDetails(@Param('id') id: string) {
@@ -87,6 +91,7 @@ export class DashboardAdminController {
     return { data, image };
   }
 
+  @Roles(Role.Approver, Role.Admin)
   @Post('approval/:id')
   async approvePartner(@Param('id') id: string, @Res() res: Response) {
     await this.dasboardAdminService.approved(

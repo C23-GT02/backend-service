@@ -153,9 +153,8 @@ export class DashboardPartnerController {
       .set({ productRef, partnerRef });
 
     res.redirect(`/partner/products`);
-    return create;
 
-//     res.status(HttpStatus.CREATED).redirect('partner/profile');
+    //     res.status(HttpStatus.CREATED).redirect('partner/profile');
 
   }
 
